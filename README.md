@@ -2,4 +2,4 @@
 
 Desafio [back-end](https://github.com/LucasGobatto/taq-challange/blob/master/backend.md#desafio-backend)
 
-Desafio front-end (comming...)
+Desafio [front-end](https://github.com/LucasGobatto/taq-challange/blob/master/frontend.md#desafio-frontend)

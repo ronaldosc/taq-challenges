@@ -25,7 +25,7 @@ Para verificar se um viajante pode viajar para um dado período, existem as segu
 - O viajante não pode viajar se houver mais de 12 pontos de infações nos ultimos 12 meses (considerando a data UTC atual);
 - O viajante não pode viajar se tiver cometido qualquer tipo de infração um ano antes ou depois do período desejado.
 
-O desafio deverá ser entregue num repositório privado no Github e deverá chamar como colaboradores os usuários: `LucasGobatto` e `rafaelsandoval`
+O desafio deverá ser entregue num repositório privado no Github e deverá chamar como colaboradores os usuários: `LucasGobatto` e `racsandoval`
 
 OBS: Para todas as operações temporais, considere UTC.
 
