@@ -1,7 +1,14 @@
-import styled from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 
-export const Container = styled.div`
-  color: ${(props: { type: string }) =>
-    props.type === "primary" ? "red" : "blue"};
-  font-size: 44px;
+export const ContainerCustom = styled.div`
+  width: 100vw;
+  height: 10vh;
+`;
+
+export const GlobalStyles = createGlobalStyle`
+  * {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+  }
 `;
