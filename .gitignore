@@ -1,3 +1,24 @@
-dist
-node_modules
-.DC_store
+traversy/
+_old
+*html
+
+#dist/
+#package-lock.json
+
+
+#Ignore arquivos que armazenam as variáveis de ambiente
+.env
+
+#Ignore diretórios de dependências
+node_modules/
+.eslintignore
+
+#Ignore arquivos de configuração do sistema
+.vscode
+
+#Ignorar imagens baixadas
+#server/images/*/*.j*
+#Ignorar chaves
+#*.pem
+#Ignore aquivos que utilizam o RESTclient para teste
+#*.http
