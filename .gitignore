@@ -1,8 +1,7 @@
-traversy/
 _old
 *html
+dist/
 
-#dist/
 #package-lock.json
 
 
