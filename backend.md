@@ -2,7 +2,7 @@
 
 # O desafio
 
-O desafio é criar uma API Rest ou Graphql em Node.js para uma aplicação de Sistema de Fiscalização de Viajantes do tempo em que ficais podem cadastrar viajantes e infrações, e validar viagens.
+O desafio é criar uma API Rest ou Graphql em Node.js para uma aplicação de Sistema de Fiscalização de Viajantes do tempo em que fiscais podem cadastrar viajantes e infrações, e validar viagens.
 
 A aplicação deverá permitir:
 

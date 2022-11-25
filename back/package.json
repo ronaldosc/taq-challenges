@@ -29,6 +29,7 @@
         "apollo-server-express": "3.11.1",
         "dotenv": "16.0.3",
         "graphql": "16.6.0",
-        "pg": "8.8.0"
+        "pg": "8.8.0",
+        "typeorm": "0.3.10"
     }
 }
