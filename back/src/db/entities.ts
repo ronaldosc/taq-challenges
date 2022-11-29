@@ -1,4 +1,5 @@
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+
 @Entity('time_traveller')
 export class TimeTraveller {
     @PrimaryGeneratedColumn('uuid')
@@ -21,7 +22,7 @@ export class InfractionSeverity {
     text!: string
     @Column()
     grade!: number
-    @OneToMany(() => Violation, (violation) => violation.severity, { nullable: true } )
+    @OneToMany(() => Violation, violation => violation.severity, { nullable: true })
     violations?: Violation[]
 }
 
