@@ -1,5 +1,6 @@
 import { ApolloServer } from 'apollo-server-express';
 import express from 'express';
+import { GraphQLError } from 'graphql';
 import { env } from 'process';
 import { dbConfig } from './db/dbconfig';
 import { resolvers } from './resolver';
@@ -10,10 +11,10 @@ const app = express()
 
 const apolloServer = new ApolloServer({
     typeDefs,
-    formatError: err => {
+    formatError: (error: GraphQLError) => {
             return {
-                name: err.name,
-                message: err.message
+                name: error.name, // Error
+                message: error.message,
             };
     },
     resolvers
@@ -26,7 +27,7 @@ const apolloServer = new ApolloServer({
 
     // antes do listen o dbconfig
     app.listen(env.PORT || 3000, () => {
-        console.log('http://localhost:%d/graphql', env.PORT || 3000);
+        console.log(`http://${env.HOST}:%d/graphql`, env.PORT || 3000);
         
     })
 })()
