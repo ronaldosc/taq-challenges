@@ -15,7 +15,7 @@ export const typeDefs = gql`
     }
 
     input getTravellerInput {
-        id: ID!
+        passport: Int!
     }
 
     input SeverityInput {
@@ -41,7 +41,7 @@ export const typeDefs = gql`
 
     type Query {
         # id: ID
-        getTravellerInfo(data: getTravellerInput): TimeTraveller!
+        getTravellerInfo(data: getTravellerInput!): TimeTraveller!
         }
     
     type Mutation {
