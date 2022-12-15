@@ -1,5 +1,4 @@
-import { gql } from 'apollo-server'
-
+import { gql } from 'apollo-server';
 
 export const typeDefs = gql`
     input TravellerInput {
@@ -11,9 +10,8 @@ export const typeDefs = gql`
     input ViolationInput {
         passport: Int!
         description: String!
-        # occurred_at: new Date!
-        timeTraveller: TravellerInput
-        severity: SeverityInput #InfractionSeverity
+        occurredAt: String!
+        severity: Int!
     }
 
     input getTravellerInput {
@@ -21,11 +19,11 @@ export const typeDefs = gql`
     }
 
     input SeverityInput {
-        serverity: Int!
+        severity: Int!
     }
 
     type Severity {
-        serverity: Int!
+        severity: Int!
     }
 
     type TimeTraveller {
@@ -36,22 +34,21 @@ export const typeDefs = gql`
     }
     type Violation {
         id: String!
-        passport: Int!
+        timeTraveller: TimeTraveller!
         description: String!
+        severity: Int!
     }
 
     type Query {
         # id: ID
-        getTravellerInfo(data: getTravellerInput): TimeTraveller
+        getTravellerInfo(data: getTravellerInput): TimeTraveller!
         }
     
     type Mutation {
-        createTimeTraveller(input: TravellerInput): TimeTraveller
-       
+        createTimeTraveller(input: TravellerInput!): TimeTraveller!
+        registryViolation(input: ViolationInput!): Violation!
     }
-
-    `
-
+`;
 
 // #type Violation { }
 // #type Infraction { }
