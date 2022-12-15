@@ -7,8 +7,6 @@ export class Violation {
     @PrimaryGeneratedColumn('uuid')
     id!: string
     @Column()
-    passport!: number
-    @Column()
     description!: string
     @Column()
     occurred_at!: Date
