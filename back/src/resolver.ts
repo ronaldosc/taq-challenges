@@ -1,5 +1,5 @@
 import { dataORM } from "./db/dbconfig";
-import { TimeTraveller, Violation, InfractionSeverity } from "./db/entities";
+import { InfractionSeverity, TimeTraveller, Violation } from "./db/entities";
 
 interface getTravellerInfoInput {
     passport: number
@@ -29,9 +29,12 @@ export const resolvers = {
   
     Query: { 
         getTravellerInfo: async (_header: never, body: { data: getTravellerInfoInput }) => {
-            return dataORM.getRepository(TimeTraveller).findOne({ where: { passport: body.data.passport } })
+            const getTraveller = await dataORM.getRepository(TimeTraveller).findOne({ where: { passport: body.data.passport } })
+            if (!getTraveller) {
+                throw new Error(`Usuário com o passaporte nº ${body.data.passport} não cadastrado.`)}
+            return getTraveller
       },
-    },
+          },
 
     Mutation: {
         createTimeTraveller: async (_header: never, body: { input: CreateTimeTravellerInput }) => {
@@ -39,10 +42,10 @@ export const resolvers = {
           const repository = dataORM.getRepository(TimeTraveller);
 
           // verifica se o traveller ja existe com o passport enviado
-          const traveller = await repository.findOne({  where: { passport: body.input.passport }});
+          const traveller = await repository.findOne({ where: { passport: body.input.passport }});
 
           if (traveller) {
-            throw new Error(`Usuário com o passaporte ${body.input.passport} já exite.`);
+            throw new Error(`Usuário com o passaporte nº ${body.input.passport} já possui cadastro.`);
           }
 
           // salva o traveller (cria a entidade) no banco, caso nao exista
@@ -65,13 +68,13 @@ export const resolvers = {
           const timeTraveller = await timeTravellerRepository.findOne({ where: { passport: body.input.passport }});
 
           if (!timeTraveller) {
-            throw new Error(`Usuário com o passaporte ${body.input.passport} não exite.`);
+            throw new Error(`Usuário com o passaporte nº ${body.input.passport} não existe.`);
           }
 
           const severity = await severityRepository.findOne({ where: { grade: body.input.severity }});
 
           if (!severity) {
-            throw new Error(`Infração com gravidade nível ${body.input.severity} não exite.`);
+            throw new Error(`Infração com gravidade nível ${body.input.severity} inexistente.`);
           }
 
           // regstrar uma violação na tavela violantion com uma relacao com o viajante em questao
@@ -92,3 +95,6 @@ export const resolvers = {
         }
     }
 }
+
+
+// TODO query getTraveller
