@@ -14,21 +14,17 @@ export const typeDefs = gql`
         severity: Int!
     }
 
-    input getTravellerInput {
+    input GetTravellerInput {
         passport: Int!
     }
 
-  input GetViolationInput {
+    input GetViolationInput {
         passport: Int!
     }
-
-
-
 
     input SeverityInput {
         severity: Int!
     }
-
 
 
     type Severity {
@@ -49,9 +45,8 @@ export const typeDefs = gql`
     }
 
     type Query {
-        # id: ID
-        getTravellerInfo(data: getTravellerInput!): TimeTraveller!
-        getTravellerViolationsInfo(data: getViolationInput!): [Violation]!  #violation não é obrigatória pois o traveller pode nao ter
+        getTravellerInfo(data: GetTravellerInput!): TimeTraveller!
+        getTravellerViolationsInfo(data: GetViolationInput!): [Violation]!  #violation não é obrigatória pois o traveller pode nao ter
         }
     
     type Mutation {
@@ -59,7 +54,3 @@ export const typeDefs = gql`
         registryViolation(input: ViolationInput!): Violation!
     }
 `;
-
-// #type Violation { }
-// #type Infraction { }
-// #type Travel {  canTravel  }
