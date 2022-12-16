@@ -5,7 +5,7 @@
     "main": "./src/index.ts",
     "scripts": {
         "build": "npx tsc",
-        "dev": "tsc ",
+        "dev": "nodemon --exec ts-node src/index.ts -e ts,graphql",
         "start": "npx tsc & node ./dist/index.js"
     },
     "repository": {

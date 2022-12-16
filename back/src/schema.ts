@@ -18,9 +18,18 @@ export const typeDefs = gql`
         passport: Int!
     }
 
+    input getViolationInput {
+        passport: Int!
+    }
+
+
+
+
     input SeverityInput {
         severity: Int!
     }
+
+
 
     type Severity {
         severity: Int!
@@ -42,6 +51,7 @@ export const typeDefs = gql`
     type Query {
         # id: ID
         getTravellerInfo(data: getTravellerInput!): TimeTraveller!
+        getTravellerViolationsInfo(data: getViolationInput!): [Violation]!  #violation não é obrigatória pois o traveller pode nao ter
         }
     
     type Mutation {
