@@ -18,7 +18,7 @@ export const typeDefs = gql`
         passport: Int!
     }
 
-    input getViolationInput {
+  input GetViolationInput {
         passport: Int!
     }
 
