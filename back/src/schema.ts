@@ -25,11 +25,15 @@ export const typeDefs = gql`
     input SeverityInput {
         severity: Int!
     }
-
-
-    type Severity {
-        severity: Int!
+    input VerifyTimeTravelPossibilityInput {
+        passport: Int!
+        travelDate: String!        
     }
+
+
+    # type Severity {
+    #     severity: Int!
+    # }
 
     type TimeTraveller {
         id: String!
@@ -43,6 +47,10 @@ export const typeDefs = gql`
         description: String!
         severity: Int!
     }
+    type PossibilityResponse {
+        message: String!
+        possibility: Boolean!
+    }
 
     type Query {
         getTravellerInfo(data: GetTravellerInput!): TimeTraveller!
@@ -52,5 +60,8 @@ export const typeDefs = gql`
     type Mutation {
         createTimeTraveller(input: TravellerInput!): TimeTraveller!
         registryViolation(input: ViolationInput!): Violation!
+        verifyTravelPossibility(input: VerifyTimeTravelPossibilityInput!): PossibilityResponse!
     }
 `;
+
+// @cypher(statement: "RETURN COLLECT(DISTINCT severity)") {[severity]}

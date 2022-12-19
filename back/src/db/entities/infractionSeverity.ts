@@ -1,6 +1,8 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Violation } from './violation';
-
+/**
+ * @description Entidade "graus de infração"
+ */
 @Entity('infraction_severity')
 export class InfractionSeverity {
     @PrimaryGeneratedColumn('uuid')

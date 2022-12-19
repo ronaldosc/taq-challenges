@@ -27,6 +27,7 @@
     "dependencies": {
         "apollo-server": "3.11.1",
         "apollo-server-express": "3.11.1",
+        "date-fns": "^2.29.3",
         "dotenv": "16.0.3",
         "graphql": "16.6.0",
         "pg": "8.8.0",
