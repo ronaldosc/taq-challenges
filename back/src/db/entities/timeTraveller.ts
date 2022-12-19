@@ -1,6 +1,8 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Violation } from './violation';
-
+/**
+ * @description Entidade "viajante do tempo"
+ */
 @Entity('time_traveller')
 export class TimeTraveller {
     @PrimaryGeneratedColumn('uuid')
