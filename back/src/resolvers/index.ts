@@ -1,17 +1,17 @@
-import createTimeTraveller from "./mutation/createTimeTraveller"
-import registryViolation from "./mutation/registryViolation"
-import verifyTravelPossibility from "./mutation/verifyTravelPossibility"
-import getTravellerInfo from "./query/getTravellerInfo"
-import getTravellerViolationsInfo from "./query/getTravellerViolationsInfo"
+import { createTimeTravellerUseCase } from "./mutation/create-time-traveller.use-case"
+import { registryViolationUseCase } from "./mutation/registry-violation.use-case"
+import { verifyTravelPossibilityUseCase } from "./mutation/verify-travel-possibility.use-case"
+import { getTravellerInfoUseCase } from "./query/get-traveller-info.use-case"
+import { getTravellerViolationsInfoUseCase } from "./query/get-traveller-violations-info.use-case"
     
 export const resolvers = {
   Query: {
-    getTravellerInfo,
-    getTravellerViolationsInfo
+    getTravellerInfo: getTravellerInfoUseCase,
+    getTravellerViolationsInfo: getTravellerViolationsInfoUseCase
   },
   Mutation: {
-    createTimeTraveller,
-    registryViolation,
-    verifyTravelPossibility
+    createTimeTraveller: createTimeTravellerUseCase,
+    registryViolation: registryViolationUseCase,
+    verifyTravelPossibility: verifyTravelPossibilityUseCase
   }
 }

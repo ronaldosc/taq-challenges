@@ -11,12 +11,6 @@ export const dataORM = new DataSource({
 })
 
 export async function dbConfig() {
-  dataORM.setOptions({ url: db_URI })
+  dataORM.setOptions({ url: db_URI }),
   await dataORM.initialize()
-}
-
-export const repos = {
-  timeTravellerRepository: dataORM.getRepository(TimeTraveller),
-  violationRepository: dataORM.getRepository(Violation),
-  severityRepository: dataORM.getRepository(InfractionSeverity)
 }
