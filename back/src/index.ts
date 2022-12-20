@@ -3,7 +3,7 @@ import express from 'express';
 import { GraphQLError } from 'graphql';
 import { env } from 'process';
 import { dbConfig } from './db/dbconfig';
-import { resolvers } from './resolver';
+import { resolvers } from './resolvers';
 import { typeDefs } from './schema';
 require("dotenv").config();
 
@@ -13,7 +13,7 @@ const apolloServer = new ApolloServer({
     typeDefs,
     formatError: (error: GraphQLError) => {
             return {
-                name: error.name, // Error
+                name: error.name,
                 message: error.message,
             };
     },
