@@ -41,7 +41,7 @@ export const registryViolationUseCase = async (
   const violation = await violationRepository.save({
     description: body.input.description,
     occurred_at: new Date(body.input.occurredAt),
-    time_traveller: { id: timeTraveller.id },
+    time_traveller: { id: timeTraveller.id, passport: timeTraveller.passport},
     severity
   })
   return {

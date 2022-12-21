@@ -6,20 +6,17 @@ export const typeDefs = gql`
     birth: String!
     passport: Int!
   }
+  input GetTravellerInput {
+    passport: Int!
+  }
   input ViolationInput {
     passport: Int!
     description: String!
     occurredAt: String!
     severity: Int!
   }
-  input GetTravellerInput {
-    passport: Int!
-  }
   input GetViolationInput {
     passport: Int!
-  }
-  input SeverityInput {
-    severity: Int!
   }
   input VerifyTimeTravelPossibilityInput {
     passport: Int!
@@ -27,14 +24,14 @@ export const typeDefs = gql`
   }
 
   type TimeTraveller {
-    id: String!
+    id: String
     name: String!
     birth: String!
     passport: Int!
   }
   type Violation {
     id: String!
-    timeTraveller: TimeTraveller!
+    passport: Int
     description: String!
     severity: Int!
   }
