@@ -14,7 +14,7 @@ const timeTravellerRepository = dataORM.getRepository(TimeTraveller)
 const violationRepository = dataORM.getRepository(Violation)
 
 export const getTravellerViolationsInfoUseCase = async (
-  _header: never,
+  _parent: never,
   body: { data: GetTravellerViolationsInputModel }
 ): Promise<ViolationModel[]> => {
   const timeTraveller = await timeTravellerRepository.findOne({

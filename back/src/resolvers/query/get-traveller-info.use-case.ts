@@ -8,7 +8,7 @@ interface GetTravellerInfoInputModel {
 const timeTravellerRepository = dataORM.getRepository(TimeTraveller)
 
 export const getTravellerInfoUseCase = async (
-    _header: never,
+    _parent: never,
     body: { data: GetTravellerInfoInputModel }
     ) => {
         const getTraveller = await timeTravellerRepository.findOne({

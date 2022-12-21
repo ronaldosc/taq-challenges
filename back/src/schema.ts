@@ -23,6 +23,10 @@ export const typeDefs = gql`
     passport: Int!
     travelDate: String!
   }
+  input LoginInput {
+    passport: Int!
+    password: String!
+  }
 
   type TimeTraveller {
     id: String
@@ -40,6 +44,10 @@ export const typeDefs = gql`
     message: String!
     possibility: Boolean!
   }
+  type LoginResponse {
+    token: String!
+    timeTraveller: TimeTraveller!
+  }
   # Query and Mutations below
   type Query {
     getTravellerInfo(data: GetTravellerInput!): TimeTraveller!
@@ -51,5 +59,6 @@ export const typeDefs = gql`
     verifyTravelPossibility(
       input: VerifyTimeTravelPossibilityInput!
     ): TravelPossibilityResponse!
+    login(input: LoginInput!): LoginResponse!
   }
 `
