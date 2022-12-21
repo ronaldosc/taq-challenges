@@ -11,7 +11,7 @@ interface CreateTimeTravellerInputModel {
 const timeTravellerRepository = dataORM.getRepository(TimeTraveller)
 
 export const createTimeTravellerUseCase = async (
-  _header: never,
+  _parent: never,
   body: { input: CreateTimeTravellerInputModel }
 ) => {
   const traveller = await timeTravellerRepository.findOne({

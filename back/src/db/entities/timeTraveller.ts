@@ -13,7 +13,7 @@ export class TimeTraveller {
     birth!: string
     @Column()
     passport!: number
-    @Column({ nullable: false })
+    @Column({ select: false })
     password!: string
     @OneToMany(() => Violation, (violation) => violation.time_traveller, { nullable: true })
     violations?: Violation[]

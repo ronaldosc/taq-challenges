@@ -18,7 +18,7 @@ const violationRepository = dataORM.getRepository(Violation)
 const severityRepository = dataORM.getRepository(InfractionSeverity)
 
 export const registryViolationUseCase = async (
-  _header: never,
+  _parent: never,
   body: { input: RegistryViolationInputModel }
 ): Promise<ViolationModel> => {
   const timeTraveller = await timeTravellerRepository.findOne({

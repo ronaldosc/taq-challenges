@@ -1,4 +1,5 @@
 import { createTimeTravellerUseCase } from "./mutation/create-time-traveller.use-case"
+import { loginUseCase } from "./mutation/login.use-case"
 import { registryViolationUseCase } from "./mutation/registry-violation.use-case"
 import { verifyTravelPossibilityUseCase } from "./mutation/verify-travel-possibility.use-case"
 import { getTravellerInfoUseCase } from "./query/get-traveller-info.use-case"
@@ -12,6 +13,7 @@ export const resolvers = {
   Mutation: {
     createTimeTraveller: createTimeTravellerUseCase,
     registryViolation: registryViolationUseCase,
-    verifyTravelPossibility: verifyTravelPossibilityUseCase
+    verifyTravelPossibility: verifyTravelPossibilityUseCase,
+    login: loginUseCase
   }
 }

@@ -11,7 +11,7 @@ const timeTravellerRepository = dataORM.getRepository(TimeTraveller)
 const violationRepository = dataORM.getRepository(Violation)
 
 export const verifyTravelPossibilityUseCase = async (
-  _header: never,
+  _parent: never,
   body: { input: VerifyTimeTravelPossibilityInputModel }
 ) => {
   if (!new Date(body.input.travelDate)?.getTime()) {
