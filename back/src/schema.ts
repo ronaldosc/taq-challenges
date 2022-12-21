@@ -5,6 +5,7 @@ export const typeDefs = gql`
     name: String!
     birth: String!
     passport: Int!
+    password: String!
   }
   input GetTravellerInput {
     passport: Int!

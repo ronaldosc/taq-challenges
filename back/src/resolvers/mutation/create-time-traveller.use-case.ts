@@ -5,6 +5,7 @@ interface CreateTimeTravellerInputModel {
   name: string
   birth: string
   passport: number
+  password: string
 }
 
 const timeTravellerRepository = dataORM.getRepository(TimeTraveller)
@@ -28,6 +29,7 @@ export const createTimeTravellerUseCase = async (
   return timeTravellerRepository.save({
     name: body.input.name,
     birth: new Date(body.input.birth).toJSON(),
-    passport: body.input.passport
+    passport: body.input.passport,
+    password: body.input.password
   })
 }

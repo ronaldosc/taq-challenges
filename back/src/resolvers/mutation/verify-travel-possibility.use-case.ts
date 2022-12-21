@@ -64,7 +64,7 @@ export const verifyTravelPossibilityUseCase = async (
   if (travelRangePossibility) {
     return {
       message:
-        "Não é possível viajar para a data pois há uma violação no periodo de 1 ano.",
+        "Não é possível viajar para a data indicada, pois há uma violação no período de 1 ano antes e após ela.",
       possibility: false
     }
   }
