@@ -4,7 +4,6 @@ dist/
 
 #package-lock.json
 
-
 #Ignore arquivos que armazenam as variáveis de ambiente
 .env
 
@@ -21,3 +20,5 @@ node_modules/
 #*.pem
 #Ignore aquivos que utilizam o RESTclient para teste
 #*.http
+#Ignore arquivos de URL
+*.url
