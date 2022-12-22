@@ -15,6 +15,8 @@ export class TimeTraveller {
     passport!: number
     @Column({ select: false })
     password!: string
+    @Column({ default: new Date() })
+    last_login_at!: Date
     @OneToMany(() => Violation, (violation) => violation.time_traveller, { nullable: true })
     violations?: Violation[]
 }

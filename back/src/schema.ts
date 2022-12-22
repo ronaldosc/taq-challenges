@@ -47,6 +47,7 @@ export const typeDefs = gql`
   type LoginResponse {
     token: String!
     timeTraveller: TimeTraveller!
+    lastLoginAt: String
   }
   # Query and Mutations below
   type Query {

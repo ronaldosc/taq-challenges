@@ -31,5 +31,6 @@ export const createTimeTravellerUseCase = async (
     birth: new Date(body.input.birth).toJSON(),
     passport: body.input.passport,
     password: body.input.password
+    // last_login_at: new Date()    esse campo já é populado por default na entidade
   })
 }
