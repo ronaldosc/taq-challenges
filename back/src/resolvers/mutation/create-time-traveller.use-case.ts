@@ -1,5 +1,6 @@
 import { dataORM } from "../../db/dbconfig"
 import { TimeTraveller } from "../../db/entities"
+import { generatePasswordWithSalt, generateRandomSalt } from "../../security"
 
 interface CreateTimeTravellerInputModel {
   name: string
@@ -26,10 +27,15 @@ export const createTimeTravellerUseCase = async (
     throw new Error(`A data de nascimento ${body.input.birth} não é válida.`)
   }
 
+  const salt = generateRandomSalt();
+  const hashedPassword = generatePasswordWithSalt(body.input.password, salt);
+
   return timeTravellerRepository.save({
     name: body.input.name,
     birth: new Date(body.input.birth).toJSON(),
     passport: body.input.passport,
-    password: body.input.password
+    password: hashedPassword,
+    salt,
+    // last_login_at: new Date()    esse campo já é populado por default na entidade
   })
 }
