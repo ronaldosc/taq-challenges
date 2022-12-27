@@ -1,6 +1,6 @@
-import { dataORM } from "../../db/dbconfig"
-import { TimeTraveller } from "../../db/entities"
-import { generatePasswordWithSalt, generateRandomSalt } from "../../security"
+import { generatePasswordWithSalt, generateRandomSalt } from "../../core/security"
+import { dataORM } from "../../data/db/dbconfig"
+import { TimeTraveller } from "../../data/db/entities"
 
 interface CreateTimeTravellerInputModel {
   name: string

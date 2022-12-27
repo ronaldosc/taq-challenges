@@ -1,5 +1,5 @@
-import { dataORM } from "../../db/dbconfig"
-import { TimeTraveller, Violation } from "../../db/entities"
+import { dataORM } from "../../data/db/dbconfig"
+import { TimeTraveller, Violation } from "../../data/db/entities"
 
 interface ViolationModel {
   id: string

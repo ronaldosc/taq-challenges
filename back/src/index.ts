@@ -1,27 +1,31 @@
-import { ApolloServer } from "apollo-server-express"
+import { ApolloServer } from "@apollo/server"
 import express from "express"
-import { GraphQLError } from "graphql"
-import { dbConfig } from "./db/dbconfig"
-import { resolvers } from "./resolvers"
-import { typeDefs } from "./schema"
+// import { GraphQLError } from "graphql"
+import { buildSchema } from "type-graphql"
+import { dbConfig } from "./data/db/dbconfig"
 require("dotenv").config()
 
 const app = express()
 
-const apolloServer = new ApolloServer({
-  typeDefs,
-  formatError: (error: GraphQLError) => {
-    return {
-      name: error.name,
-      message: error.message
-    }
-  },
-  resolvers
-})
-
 ;(async function () {
+  const schema = await buildSchema({
+     resolvers:  [ ()  => { }  ],
+    emitSchemaFile: {   path: '.\\api\\time-traveller.resolver.ts'      }    
+  })
+
+  const apolloServer = new ApolloServer({
+    // typeDefs,
+    formatError: ( _: any , error: any) => {
+      return {
+        name: error.name,
+        message: error.message
+      }
+    },
+    schema     
+  })
+
   await apolloServer.start()
-  apolloServer.applyMiddleware({ app, path: "/graphql" })
+  apolloServer.executeHTTPGraphQLRequest
   await dbConfig()
 
   app.listen(process.env.PORT || 3000, () => {

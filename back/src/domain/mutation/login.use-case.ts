@@ -1,7 +1,6 @@
-import jwt from "jsonwebtoken";
-import { dataORM } from "../../db/dbconfig";
-import { TimeTraveller } from "../../db/entities";
-import { generatePasswordWithSalt } from "../../security";
+import { createToken, generatePasswordWithSalt } from "../../core/security";
+import { dataORM } from "../../data/db/dbconfig";
+import { TimeTraveller } from "../../data/db/entities";
 require("dotenv").config()
 
 /*
@@ -64,9 +63,7 @@ export const loginUseCase = async (
     throw new Error(`Credenciais de usuário inválidas.`);
   }
 
-  const secret = process.env.SECRET!   // colocar no SECRET do dotenv
-  const expires = "1h";
-  const token = jwt.sign({ timeTraveller }, secret, { expiresIn: expires });
+  const token = createToken({ timeTraveller });
 
   const updatedTimeTraveller = await timeTravellerRepository.save({...timeTraveller, last_login_at: new Date()});
 
