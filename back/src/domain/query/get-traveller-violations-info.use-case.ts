@@ -1,25 +1,24 @@
-import { dataORM } from "../../data/db/dbconfig"
-import { TimeTraveller, Violation } from "../../data/db/entities"
+import { TimeTravellerDataSource, ViolationDataSource } from "../../data/source"
 import { GetTravellerViolationsInputModel, ViolationModel } from "../model"
-
-const timeTravellerRepository = dataORM.getRepository(TimeTraveller)
-const violationRepository = dataORM.getRepository(Violation)
 
 export const getTravellerViolationsInfoUseCase = async (
   data: GetTravellerViolationsInputModel
 ): Promise<ViolationModel[]> => {
-  const timeTraveller = await timeTravellerRepository.findOne({
-    where: { passport: data.passport }
-  })
+  const timeTravellerRepository = new TimeTravellerDataSource()
+  const violationRepository = new ViolationDataSource()
+
+  const timeTraveller = await timeTravellerRepository.findOneByPassport(
+    data.passport
+  )
+
   if (!timeTraveller) {
     throw new Error(
       `Usuário com o passaporte nº ${data.passport} já possui cadastro.`
     )
   }
-  const violations = await violationRepository.find({
-    where: { time_traveller: timeTraveller },
-    relations: ["time_traveller", "severity"]
-  })
+  const violations = await violationRepository.findByTravellerId(
+    timeTraveller.id
+  )
 
   return violations.map(violation => ({
     ...violation,

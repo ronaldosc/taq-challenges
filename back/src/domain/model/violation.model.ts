@@ -3,6 +3,7 @@ export interface ViolationModel {
   description: string
   severity: number
 }
+
 export interface GetTravellerViolationsInputModel {
   passport: number
 }
