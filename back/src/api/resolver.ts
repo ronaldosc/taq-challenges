@@ -5,7 +5,7 @@ import {
   loginUseCase,
   registryViolationUseCase,
   verifyTravelPossibilityUseCase
-} from '../domain';
+} from "../domain"
 
 export const resolvers = {
   Query: {

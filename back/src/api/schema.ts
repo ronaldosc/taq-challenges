@@ -1,4 +1,4 @@
-import { gql } from "@apollo/server"
+/* import { gql } from "@apollo/server"
 
 export const typeDefs = gql`
   input TravellerInput {
@@ -63,3 +63,4 @@ export const typeDefs = gql`
     login(input: LoginInput!): LoginResponse!
   }
 `
+ */

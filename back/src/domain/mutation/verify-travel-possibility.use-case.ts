@@ -1,31 +1,24 @@
 import { add, sub } from "date-fns"
 import { dataORM } from "../../data/db/dbconfig"
 import { TimeTraveller, Violation } from "../../data/db/entities"
-
-interface VerifyTimeTravelPossibilityInputModel {
-  passport: number
-  travelDate: string
-}
+import { VerifyTimeTravelPossibilityInputModel } from "../model"
 
 const timeTravellerRepository = dataORM.getRepository(TimeTraveller)
 const violationRepository = dataORM.getRepository(Violation)
 
 export const verifyTravelPossibilityUseCase = async (
-  _parent: never,
-  body: { input: VerifyTimeTravelPossibilityInputModel }
+  input: VerifyTimeTravelPossibilityInputModel
 ) => {
-  if (!new Date(body.input.travelDate)?.getTime()) {
-    throw new Error(`A data ${body.input.travelDate} não é valida'.`)
+  if (!new Date(input.travelDate)?.getTime()) {
+    throw new Error(`A data ${input.travelDate} não é valida'.`)
   }
   const timeTraveller = await timeTravellerRepository.findOne({
-    where: { passport: body.input.passport }
+    where: { passport: input.passport }
   })
   if (!timeTraveller) {
-    throw new Error(
-      `Usuário com o passaporte nº ${body.input.passport} não existe.`
-    )
+    throw new Error(`Usuário com o passaporte nº ${input.passport} não existe.`)
   }
-  if (new Date(timeTraveller.birth) > new Date(body.input.travelDate)) {
+  if (new Date(timeTraveller.birth) > new Date(input.travelDate)) {
     return {
       message:
         "Não é possível viajar para antes da data de nascimento de um viajante.",

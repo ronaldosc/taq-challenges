@@ -1,47 +1,37 @@
 import { dataORM } from "../../data/db/dbconfig"
-import { InfractionSeverity, TimeTraveller, Violation } from "../../data/db/entities"
-
-interface ViolationModel {
-  id: string
-  description: string
-  severity: number
-}
-interface RegistryViolationInputModel {
-  passport: number
-  description: string
-  occurredAt: Date
-  severity: number
-}
+import {
+  InfractionSeverity,
+  TimeTraveller,
+  Violation
+} from "../../data/db/entities"
+import { RegistryViolationInputModel, ViolationModel } from "../model"
 
 const timeTravellerRepository = dataORM.getRepository(TimeTraveller)
 const violationRepository = dataORM.getRepository(Violation)
 const severityRepository = dataORM.getRepository(InfractionSeverity)
 
 export const registryViolationUseCase = async (
-  _parent: never,
-  body: { input: RegistryViolationInputModel }
+  input: RegistryViolationInputModel
 ): Promise<ViolationModel> => {
   const timeTraveller = await timeTravellerRepository.findOne({
-    where: { passport: body.input.passport }
+    where: { passport: input.passport }
   })
   if (!timeTraveller) {
-    throw new Error(
-      `Usuário com o passaporte nº ${body.input.passport} não existe.`
-    )
+    throw new Error(`Usuário com o passaporte nº ${input.passport} não existe.`)
   }
   const severity = await severityRepository.findOne({
-    where: { grade: body.input.severity }
+    where: { grade: input.severity }
   })
 
   if (!severity) {
     throw new Error(
-      `Infração com gravidade nível ${body.input.severity} inexistente.`
+      `Infração com gravidade nível ${input.severity} inexistente.`
     )
   }
   const violation = await violationRepository.save({
-    description: body.input.description,
-    occurred_at: new Date(body.input.occurredAt),
-    time_traveller: { id: timeTraveller.id, passport: timeTraveller.passport},
+    description: input.description,
+    occurred_at: new Date(input.occurredAt),
+    time_traveller: { id: timeTraveller.id, passport: timeTraveller.passport },
     severity
   })
   return {

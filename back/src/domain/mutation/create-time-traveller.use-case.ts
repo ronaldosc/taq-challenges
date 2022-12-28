@@ -1,41 +1,36 @@
-import { generatePasswordWithSalt, generateRandomSalt } from "../../core/security"
+import {
+  generatePasswordWithSalt,
+  generateRandomSalt
+} from "../../core/security"
 import { dataORM } from "../../data/db/dbconfig"
 import { TimeTraveller } from "../../data/db/entities"
-
-interface CreateTimeTravellerInputModel {
-  name: string
-  birth: string
-  passport: number
-  password: string
-}
+import { CreateTimeTravellerInputModel } from "../model"
 
 const timeTravellerRepository = dataORM.getRepository(TimeTraveller)
 
 export const createTimeTravellerUseCase = async (
-  _parent: never,
-  body: { input: CreateTimeTravellerInputModel }
+  input: CreateTimeTravellerInputModel
 ) => {
   const traveller = await timeTravellerRepository.findOne({
-    where: { passport: body.input.passport }
+    where: { passport: input.passport }
   })
   if (traveller) {
     throw new Error(
-      `Usuário com o passaporte nº ${body.input.passport} já possui cadastro.`
+      `Usuário com o passaporte nº ${input.passport} já possui cadastro.`
     )
   }
-  if (!new Date(body.input.birth)?.getTime()) {
-    throw new Error(`A data de nascimento ${body.input.birth} não é válida.`)
+  if (!new Date(input.birth)?.getTime()) {
+    throw new Error(`A data de nascimento ${input.birth} não é válida.`)
   }
 
-  const salt = generateRandomSalt();
-  const hashedPassword = generatePasswordWithSalt(body.input.password, salt);
+  const salt = generateRandomSalt()
+  const hashedPassword = generatePasswordWithSalt(input.password, salt)
 
   return timeTravellerRepository.save({
-    name: body.input.name,
-    birth: new Date(body.input.birth).toJSON(),
-    passport: body.input.passport,
+    name: input.name,
+    birth: new Date(input.birth).toJSON(),
+    passport: input.passport,
     password: hashedPassword,
-    salt,
-    // last_login_at: new Date()    esse campo já é populado por default na entidade
+    salt
   })
 }
