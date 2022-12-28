@@ -1,14 +1,14 @@
 import { add, sub } from "date-fns"
 import { dataORM } from "../../data/db/dbconfig"
 import { TimeTraveller, Violation } from "../../data/db/entities"
-import { VerifyTimeTravelPossibilityInputModel } from "../model"
+import { TravelPossibilityResponseModel, VerifyTimeTravelPossibilityInputModel } from "../model"
 
 const timeTravellerRepository = dataORM.getRepository(TimeTraveller)
 const violationRepository = dataORM.getRepository(Violation)
 
 export const verifyTravelPossibilityUseCase = async (
   input: VerifyTimeTravelPossibilityInputModel
-) => {
+): Promise<TravelPossibilityResponseModel> => {
   if (!new Date(input.travelDate)?.getTime()) {
     throw new Error(`A data ${input.travelDate} não é valida'.`)
   }

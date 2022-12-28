@@ -1,14 +1,14 @@
 import { Arg, Mutation, Resolver } from "type-graphql"
 import { loginUseCase } from "../domain"
+import { LoginResponseModel } from "../domain/model"
 import { LoginInput } from "./input"
-import { LoginResponse, TravelPossibilityResponse } from "./type"
+import { LoginResponse } from "./type"
 
 //   estão certos o model, type e input ?
 @Resolver()
 export class LoginResolver {
-  @Mutation(() => TravelPossibilityResponse)
-  getTravellerInfo(@Arg("input") input: LoginInput): Promise<LoginResponse> {
+  @Mutation(() => LoginResponse)
+  login(@Arg("input") input: LoginInput): Promise<LoginResponseModel> {
     return loginUseCase(input)
   }
-  
 }

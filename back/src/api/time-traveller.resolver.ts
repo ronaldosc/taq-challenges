@@ -6,7 +6,7 @@ import {
 } from "../domain"
 import {
   TimeTravellerModel,
-  VerifyTimeTravelPossibilityInputModel
+  TravelPossibilityResponseModel
 } from "../domain/model"
 import {
   CreateTimeTravellerInput,
@@ -32,10 +32,10 @@ export class TimeTravellerResolver {
     return createTimeTravellerUseCase(input)
   }
 
-/*   @Mutation(() => TravelPossibilityResponse)
+  @Mutation(() => TravelPossibilityResponse)
   verifyTravelPossibility(
     @Arg("input") input: VerifyTimeTravelPossibilityInput
-  ): Promise<VerifyTimeTravelPossibilityInputModel> {
+  ): Promise<TravelPossibilityResponseModel> {
     return verifyTravelPossibilityUseCase(input)
-  } */
+  }
 }
