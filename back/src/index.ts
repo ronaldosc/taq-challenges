@@ -1,27 +1,45 @@
-import { ApolloServer } from "apollo-server-express"
+import { ApolloServer } from "@apollo/server"
+import { expressMiddleware } from "@apollo/server/express4"
 import express from "express"
-import { GraphQLError } from "graphql"
-import { dbConfig } from "./db/dbconfig"
-import { resolvers } from "./resolvers"
-import { typeDefs } from "./schema"
+import "reflect-metadata"
+// import { GraphQLError } from "graphql"
+import { GraphQLFormattedError } from "graphql"
+import { buildSchema } from "type-graphql"
+import { LoginResolver, TimeTravellerResolver, ViolationsResolver } from "./api"
+import { dbConfig } from "./data/db/dbconfig"
 require("dotenv").config()
 
 const app = express()
 
-const apolloServer = new ApolloServer({
-  typeDefs,
-  formatError: (error: GraphQLError) => {
-    return {
-      name: error.name,
-      message: error.message
-    }
-  },
-  resolvers
-})
+interface ServerContext {
+  token?: string
+}
 
 ;(async function () {
+  const schema = await buildSchema({
+    resolvers: [TimeTravellerResolver, ViolationsResolver, LoginResolver]
+  })
+
+  const apolloServer = new ApolloServer<ServerContext>({
+    formatError: (error: GraphQLFormattedError) => {
+      return {
+        name: error,
+        message: error.message,
+        locations: error.locations
+      }
+      console.error(">  Some error occurred in GraphQL  <")
+    },
+    schema
+  })
+
   await apolloServer.start()
-  apolloServer.applyMiddleware({ app, path: "/graphql" })
+  app.use(
+    "/graphql",
+    express.json(),
+    expressMiddleware(apolloServer, {
+      context: async ({ req }) => ({ token: req.headers.token })
+    })
+  )
   await dbConfig()
 
   app.listen(process.env.PORT || 3000, () => {
