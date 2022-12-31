@@ -10,7 +10,7 @@ export const getTravellerViolationsInfoUseCase = async (
   const timeTraveller = await timeTravellerRepository.findOneByPassport(
     data.passport
   )
-
+//TODO  ACERTAR O ERRO AQUI
   if (!timeTraveller) {
     throw new Error(
       `Usuário com o passaporte nº ${data.passport} já possui cadastro.`

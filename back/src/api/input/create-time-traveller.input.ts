@@ -1,3 +1,4 @@
+import { isStrongPassword, Min } from "class-validator"
 import { Field, InputType, Int } from "type-graphql"
 import { CreateTimeTravellerInputModel } from "../../domain/model"
 
@@ -10,8 +11,10 @@ export class CreateTimeTravellerInput implements CreateTimeTravellerInputModel {
   birth!: string
 
   @Field(() => Int, { description: "Time traveller's passport" })
+  @Min(1)
   passport!: number
 
-  @Field()
+  @Field(() => isStrongPassword)
   password!: string
+  
 }
