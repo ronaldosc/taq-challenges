@@ -1,25 +1,11 @@
-import { createToken, generatePasswordWithSalt } from "../../core/security"
-import { dataORM } from "../../data/db/dbconfig"
-import { TimeTraveller } from "../../data/db/entities"
-import { LoginInputModel, LoginResponseModel } from "../model"
+import { createToken, generatePasswordWithSalt } from "../../core/security";
+import { TimeTravellerDataSource } from '../../data/source';
+import { LoginInputModel, LoginResponseModel } from "../model";
 require("dotenv").config()
 
-const timeTravellerRepository = dataORM.getRepository(TimeTraveller)
-
-export const loginUseCase = async (input: LoginInputModel
-): Promise<LoginResponseModel> => {
-  const timeTraveller = await timeTravellerRepository.findOne({
-    where: { passport: input.passport },
-    select: {
-      id: true,
-      name: true,
-      birth: true,
-      passport: true,
-      password: true,
-      salt: true,
-      last_login_at: true
-    }
-  })
+export const loginUseCase = async (input: LoginInputModel): Promise<LoginResponseModel> => {
+  const repository = new TimeTravellerDataSource();
+  const timeTraveller = await repository.findOneByPassport(input.passport);
 
   const salt = timeTraveller?.salt
   const hashedPassword = generatePasswordWithSalt(
@@ -33,10 +19,7 @@ export const loginUseCase = async (input: LoginInputModel
 
   const token = createToken({ timeTraveller })
 
-  const updatedTimeTraveller = await timeTravellerRepository.save({
-    ...timeTraveller,
-    last_login_at: new Date()
-  })
+  const updatedTimeTraveller = await repository.save(timeTraveller);
 
   return {
     token,

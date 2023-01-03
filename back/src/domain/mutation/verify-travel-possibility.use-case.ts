@@ -1,23 +1,22 @@
 import { add, sub } from "date-fns"
-import { dataORM } from "../../data/db/dbconfig"
-import { TimeTraveller, Violation } from "../../data/db/entities"
 import { TravelPossibilityResponseModel, VerifyTimeTravelPossibilityInputModel } from "../model"
-
-const timeTravellerRepository = dataORM.getRepository(TimeTraveller)
-const violationRepository = dataORM.getRepository(Violation)
+import { TimeTravellerDataSource, ViolationDataSource } from "../../data/source"
 
 export const verifyTravelPossibilityUseCase = async (
   input: VerifyTimeTravelPossibilityInputModel
 ): Promise<TravelPossibilityResponseModel> => {
+  const timeTravellerRepository = new TimeTravellerDataSource();
+  const violationRepository = new ViolationDataSource();
+
   if (!new Date(input.travelDate)?.getTime()) {
     throw new Error(`A data ${input.travelDate} não é valida'.`)
   }
-  const timeTraveller = await timeTravellerRepository.findOne({
-    where: { passport: input.passport }
-  })
+  const timeTraveller = await timeTravellerRepository.findOneByPassport(input.passport);
+
   if (!timeTraveller) {
     throw new Error(`Usuário com o passaporte nº ${input.passport} não existe.`)
   }
+
   if (new Date(timeTraveller.birth) > new Date(input.travelDate)) {
     return {
       message:
@@ -25,10 +24,9 @@ export const verifyTravelPossibilityUseCase = async (
       possibility: false
     }
   }
-  const violations = await violationRepository.find({
-    where: { time_traveller: timeTraveller },
-    relations: ["severity"]
-  })
+
+  const violations = await violationRepository.findByTravellerId(timeTraveller.id);
+
   const sumGrades = violations.reduce((acum, violation) => {
     if (
       new Date(violation.occurred_at) < new Date() &&
@@ -49,11 +47,8 @@ export const verifyTravelPossibilityUseCase = async (
   }
   const startDate = sub(new Date(), { years: 1 })
   const endDate = add(new Date(), { years: 1 })
-  const travelRangePossibility = await violationRepository
-    .createQueryBuilder("violation")
-    .where("violation.occurred_at >= :startDate", { startDate })
-    .andWhere("violation.occurred_at <= :endDate", { endDate })
-    .getOne()
+  const travelRangePossibility = await violationRepository.findByDateRange(startDate, endDate);
+
   if (travelRangePossibility) {
     return {
       message:

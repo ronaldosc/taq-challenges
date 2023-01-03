@@ -1,11 +1,11 @@
-import { Field, Int, ObjectType } from "type-graphql"
+import { Field, InputType, Int } from "type-graphql"
 import { LoginInputModel } from "../../domain/model"
 
-@ObjectType()
+@InputType()
 export class LoginInput implements LoginInputModel {
   @Field(() => Int, { description: "Time traveller passport" })
   passport!: number
 
-  @Field({ description: "Password credential for registered time traveller" })
+  @Field(() => String, { description: "Password credential for registered time traveller" })
   password!: string
 }

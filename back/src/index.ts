@@ -1,15 +1,17 @@
-import { ApolloServer } from "@apollo/server"
-import { expressMiddleware } from "@apollo/server/express4"
-import express from "express"
-import "reflect-metadata"
-// import { GraphQLError } from "graphql"
-import { GraphQLFormattedError } from "graphql"
-import { buildSchema } from "type-graphql"
-import { LoginResolver, TimeTravellerResolver, ViolationsResolver } from "./api"
-import { dbConfig } from "./data/db/dbconfig"
+import { ApolloServer } from "@apollo/server";
+import { expressMiddleware } from "@apollo/server/express4";
+import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
+import express, { Request } from "express";
+import { GraphQLFormattedError, Token, TokenKind } from "graphql";
+import http from 'node:http';
+import "reflect-metadata";
+import { AuthChecker, Authorized, buildSchema, BuildSchemaOptions } from "type-graphql";
+import { LoginResolver, TimeTravellerResolver, ViolationsResolver } from "./api";
+import { dbConfig } from "./data/db/dbconfig";
 require("dotenv").config()
 
 const app = express()
+const httpServer/* <AuthChecker> */ = http.createServer(app);
 
 interface ServerContext {
   token?: string
@@ -17,35 +19,58 @@ interface ServerContext {
 
 ;(async function () {
   const schema = await buildSchema({
-    resolvers: [TimeTravellerResolver, ViolationsResolver, LoginResolver]
+    validate: false,
+    dateScalarMode: "isoDate",
+    
+    resolvers: [ TimeTravellerResolver, ViolationsResolver, LoginResolver ],
+
+    //plugins<[T<BuildSchemaOptions>]>: [ApolloServerPluginDrainHttpServer({ httpServer })],
+
+    authChecker: ({ context }: { context: ServerContext }) => {
+      console.log(context.token) // verifica se tem o token;
+      return true
+    },
+
+    authMode: (undefined),
+  
+    //directives: [Authorized(Token), TokenKind]
   })
 
   const apolloServer = new ApolloServer<ServerContext>({
+    schema,
+    
     formatError: (error: GraphQLFormattedError) => {
+      console.error(">  Some error occurred in request/GraphQL  <")
       return {
-        name: error,
         message: error.message,
-        locations: error.locations
+        locations: error.locations,
+        path: error.path,
+        extensions: error.extensions
+        
       }
-      console.error(">  Some error occurred in GraphQL  <")
-    },
-    schema
+    }
   })
 
   await apolloServer.start()
+
   app.use(
     "/graphql",
     express.json(),
     expressMiddleware(apolloServer, {
-      context: async ({ req }) => ({ token: req.headers.token })
+      context: async ({ req }) => {
+        let context = { token: req.headers.authorization }
+        return context
+      } // todo verificar/validar o token aqui
     })
   )
-  await dbConfig()
 
-  app.listen(process.env.PORT || 3000, () => {
-    console.log(
-      `http://${process.env.HOST}:%d/graphql`,
-      process.env.PORT || 3000
-    )
-  })
+  await dbConfig()
+  
 })()
+
+app.listen(process.env.PORT || 3000, () => {
+  console.log(
+    `http://${process.env.HOST}:%d/graphql`,
+    process.env.PORT || 3000
+  )
+})
