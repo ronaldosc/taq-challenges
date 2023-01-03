@@ -1,4 +1,4 @@
-import { Arg, Mutation, Query, Resolver } from "type-graphql"
+import { Arg, Authorized, Mutation, Query, Resolver } from "type-graphql"
 import {
   createTimeTravellerUseCase,
   getTravellerInfoUseCase,
@@ -19,6 +19,7 @@ import { TimeTraveller, TravelPossibilityResponse } from "./type"
 export class TimeTravellerResolver {
   
   @Query(() => TimeTraveller)
+  @Authorized()
   getTravellerInfo(
     @Arg("data") data: GetTravellerInfoInput
   ): Promise<TimeTravellerModel> {

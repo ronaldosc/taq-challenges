@@ -1,11 +1,10 @@
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
-import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
-import express, { Request } from "express";
-import { GraphQLFormattedError, Token, TokenKind } from "graphql";
+import express from "express";
+import { GraphQLFormattedError } from "graphql";
 import http from 'node:http';
 import "reflect-metadata";
-import { AuthChecker, Authorized, buildSchema, BuildSchemaOptions } from "type-graphql";
+import { buildSchema } from "type-graphql";
 import { LoginResolver, TimeTravellerResolver, ViolationsResolver } from "./api";
 import { dbConfig } from "./data/db/dbconfig";
 require("dotenv").config()
@@ -15,12 +14,13 @@ const httpServer/* <AuthChecker> */ = http.createServer(app);
 
 interface ServerContext {
   token?: string
+  authScope?: string;
 }
 
 ;(async function () {
   const schema = await buildSchema({
-    validate: false,
-    dateScalarMode: "isoDate",
+    // validate: false,
+    // dateScalarMode: "isoDate",
     
     resolvers: [ TimeTravellerResolver, ViolationsResolver, LoginResolver ],
 
@@ -31,7 +31,7 @@ interface ServerContext {
       return true
     },
 
-    authMode: (undefined),
+    // authMode: (undefined),
   
     //directives: [Authorized(Token), TokenKind]
   })
@@ -40,7 +40,8 @@ interface ServerContext {
     schema,
     
     formatError: (error: GraphQLFormattedError) => {
-      console.error(">  Some error occurred in request/GraphQL  <")
+      console.error(">  Some error occurred in processing request/GraphQL  <")
+      console.log(error);
       return {
         message: error.message,
         locations: error.locations,
@@ -58,9 +59,8 @@ interface ServerContext {
     express.json(),
     expressMiddleware(apolloServer, {
       context: async ({ req }) => {
-        let context = { token: req.headers.authorization }
-        return context
-      } // todo verificar/validar o token aqui
+        return { token: req.headers.authorization }
+      }
     })
   )
 

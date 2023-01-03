@@ -1,19 +1,19 @@
 import { Arg, Mutation, Query, Resolver } from "type-graphql"
 import {
-    getTravellerViolationsInfoUseCase,
-    registryViolationUseCase
+  getTravellerViolationsInfoUseCase,
+  registryViolationUseCase
 } from "../domain"
-import { ViolationModel } from "../domain/model"
+import { TravellerViolationModel, ViolationModel } from "../domain/model"
 import { GetTravellerViolationsInput, RegistryViolationInput } from "./input"
-import { Violation } from "./type"
+import { TravellerViolation, Violation } from "./type"
 
 @Resolver()
 export class ViolationsResolver {
 
-  @Query(() => Violation)
+  @Query(() => [TravellerViolation])
   getTravellerViolationsInfo(
     @Arg("data") data: GetTravellerViolationsInput
-  ): Promise<ViolationModel[]> {
+  ): Promise<TravellerViolationModel[] | object | unknown> {
     return getTravellerViolationsInfoUseCase(data)
   }
   

@@ -5,7 +5,7 @@ import { VerifyTimeTravelPossibilityInputModel } from "../../domain/model"
 export class VerifyTimeTravelPossibilityInput
   implements VerifyTimeTravelPossibilityInputModel
 {
-  @Field(() => Int, { description: "Time traveller passport" })
+  @Field(() => Int, { description: "Time traveller's passport" })
   passport!: number
 
   @Field({ description: "Request wish date to travel" })

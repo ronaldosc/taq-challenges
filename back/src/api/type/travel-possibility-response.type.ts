@@ -5,7 +5,7 @@ import { TravelPossibilityResponseModel } from "../../domain/model"
 export class TravelPossibilityResponse
   implements TravelPossibilityResponseModel
 {
-  @Field({ description: "Travel possibility along a time period" })
+  @Field({ description: "Travel possibility message for the specified time period" })
   message!: string
 
   @Field(() => Boolean)
