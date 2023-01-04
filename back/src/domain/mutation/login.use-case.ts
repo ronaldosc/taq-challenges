@@ -16,8 +16,9 @@ export const loginUseCase = async (input: LoginInputModel): Promise<LoginRespons
   if (timeTraveller?.password !== hashedPassword || !timeTraveller) {
     throw new Error(`Credenciais de usuário inválidas.`)
   }
-
-  const token = createToken({ timeTraveller })
+  
+  const { id, name, passport, birth } = timeTraveller
+  const token = createToken({ timeTraveller: { id, name, passport, birth } });
 
   const updatedTimeTraveller = await repository.save(timeTraveller);
 

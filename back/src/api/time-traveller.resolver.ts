@@ -34,6 +34,7 @@ export class TimeTravellerResolver {
   }
 
   @Mutation(() => TravelPossibilityResponse)
+  @Authorized()
   verifyTravelPossibility(
     @Arg("input") input: VerifyTimeTravelPossibilityInput
   ): Promise<TravelPossibilityResponseModel> {

@@ -3,7 +3,6 @@ import { CreateTimeTravellerInputModel } from "../../domain/model"
 
 @InputType()
 export class CreateTimeTravellerInput implements CreateTimeTravellerInputModel {
-  
   @Field()
   name!: string
 
@@ -13,7 +12,6 @@ export class CreateTimeTravellerInput implements CreateTimeTravellerInputModel {
   @Field(() => Int, { description: "Time traveller's passport" })
   passport!: number
 
-  @Field(/* () => isStrongPassword */)
-  password!: string
-  
+  @Field()
+  password!: string  
 }

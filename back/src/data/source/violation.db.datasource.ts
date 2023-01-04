@@ -17,7 +17,7 @@ export class ViolationDataSource {
   findByTravellerId(id: string) {
     return this.violationRepository.find({
       where: { time_traveller: { id } },
-      relations: ["time_traveller", "severity"]
+      relations: ["severity"]
     })
   }
 

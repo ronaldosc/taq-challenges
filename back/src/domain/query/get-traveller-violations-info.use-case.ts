@@ -1,30 +1,35 @@
-import { isNotEmptyObject } from "class-validator"
 import { TimeTravellerDataSource, ViolationDataSource } from "../../data/source"
 import {
-  GetTravellerViolationsInputModel
+  GetTravellerViolationsInputModel,
+  TravellerViolationModel
 } from "../model"
 
 export const getTravellerViolationsInfoUseCase = async (
   data: GetTravellerViolationsInputModel
-) /* : Promise<TravellerViolationsModel[] | object>  */ => {
-  //////////////////////////////////
+): Promise<TravellerViolationModel[]> => {
   const timeTravellerRepository = new TimeTravellerDataSource()
   const violationRepository = new ViolationDataSource()
 
   const timeTraveller = await timeTravellerRepository.findOneByPassport(
     data.passport
   )
-  //TODO  ACERTAR O ERRO AQUI
   if (!timeTraveller) {
     throw new Error(`Usuário com o passaporte nº ${data.passport} não existe.`)
   }
 
   const violations = await violationRepository.findByTravellerId(
     timeTraveller.id
-  ).then(violations => {
-    if (!isNotEmptyObject(violations.reduce)) {
-      return {message: `Usuário com o passaporte nº ${data.passport} não possui infrações registradas.`}
-    } else {
+  )
+
+  //  if (violations.every(violation => violation.time_traveller !== null)) {
+  //     return {message: `Usuário com o passaporte nº ${data.passport} não possui infrações registradas.`}
+  //   }
+    // for (const [_key, value] of Object.entries(violations.values)) {
+      if (!violations.length){
+        throw new Error(`Usuário com o passaporte nº ${data.passport} não possui infrações registradas.`)}
+      
+    // console.dir(violations) /////////////////
+    
       return violations.map(
         violation => (
           data.passport,
@@ -35,9 +40,8 @@ export const getTravellerViolationsInfoUseCase = async (
         )
       )
     }
-  });  
+    
 
-  console.dir(violations) /////////////////
 /* 
   if (violations.includes({})) {
     return {
@@ -46,5 +50,4 @@ export const getTravellerViolationsInfoUseCase = async (
   } */
  
   
-}
 

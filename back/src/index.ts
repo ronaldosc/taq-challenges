@@ -2,53 +2,53 @@ import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
 import express from "express";
 import { GraphQLFormattedError } from "graphql";
-import http from 'node:http';
 import "reflect-metadata";
 import { buildSchema } from "type-graphql";
 import { LoginResolver, TimeTravellerResolver, ViolationsResolver } from "./api";
+import { verifyToken } from "./core/security";
 import { dbConfig } from "./data/db/dbconfig";
+import { ServerContext } from "./domain/model/server-context.model";
 require("dotenv").config()
 
 const app = express()
-const httpServer/* <AuthChecker> */ = http.createServer(app);
-
-interface ServerContext {
-  token?: string
-  authScope?: string;
-}
 
 ;(async function () {
   const schema = await buildSchema({
-    // validate: false,
-    // dateScalarMode: "isoDate",
-    
     resolvers: [ TimeTravellerResolver, ViolationsResolver, LoginResolver ],
-
-    //plugins<[T<BuildSchemaOptions>]>: [ApolloServerPluginDrainHttpServer({ httpServer })],
-
     authChecker: ({ context }: { context: ServerContext }) => {
-      console.log(context.token) // verifica se tem o token;
-      return true
-    },
+      if (!context.token) {
+        throw new Error('Usuário sem credenciais válidas!');
+      }
 
-    // authMode: (undefined),
-  
-    //directives: [Authorized(Token), TokenKind]
+      try {
+        const decodedToken = verifyToken(context.token);
+
+        if (!!decodedToken?.birth && !!decodedToken.id && !!decodedToken.name && !!decodedToken.passport) {
+          return true;
+        };
+
+        throw new Error();
+      } catch {
+        throw new Error('Usuário sem credenciais válidas!');
+      }
+    }
   })
 
   const apolloServer = new ApolloServer<ServerContext>({
     schema,
     
     formatError: (error: GraphQLFormattedError) => {
-      console.error(">  Some error occurred in processing request/GraphQL  <")
-      console.log(error);
-      return {
-        message: error.message,
-        locations: error.locations,
-        path: error.path,
-        extensions: error.extensions
-        
+      const { message, locations, path, extensions } = error
+      let tracesKey = Object.values(extensions!).toString()
+      if (tracesKey.includes("GraphQLError")) {
+        console.error(">  Some error occurred in processing request and/or GraphQL  <")
+        return { message, locations, path, extensions }
       }
+      return { message }
+      // se for o erro for emitido por GraphQLError ele exibirá informação completa
+          /*   let tracesKey = Object.values(error.extensions!).toString()
+               if (tracesKey.match(/\W(Error)/gm)) {
+                 return {message: error.message} */
     }
   })
 
@@ -59,7 +59,7 @@ interface ServerContext {
     express.json(),
     expressMiddleware(apolloServer, {
       context: async ({ req }) => {
-        return { token: req.headers.authorization }
+        return { token: req.headers.authorization! }
       }
     })
   )
