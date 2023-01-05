@@ -10,7 +10,7 @@ export class RegistryViolationInput implements RegistryViolationInputModel {
   description!: string
 
   @Field()
-  occurredAt!: Date
+  occurredAt!: string
 
   @Field(() => Int)
   severity!: number

@@ -1,7 +1,7 @@
 import { Field, ObjectType } from "type-graphql"
 import { TimeTraveller } from "../../data/db/entities"
 import { LoginResponseModel } from "../../domain/model"
-import { TimeTraveller as TimeTravellerType } from "./"
+import { TimeTraveller as TimeTravellerType } from "./time-traveller.type"
 
 @ObjectType()
 export class LoginResponse implements LoginResponseModel {
@@ -13,6 +13,6 @@ export class LoginResponse implements LoginResponseModel {
   timeTraveller!: TimeTraveller
 ////////////////////////////
 
-  @Field({ description: "Last it has logged in datetime"})
+  @Field(() => Date, { description: "Last it has logged in datetime"})
   lastLoginAt?: string
 }

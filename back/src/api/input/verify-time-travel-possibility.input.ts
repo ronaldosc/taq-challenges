@@ -8,6 +8,6 @@ export class VerifyTimeTravelPossibilityInput
   @Field(() => Int, { description: "Time traveller's passport" })
   passport!: number
 
-  @Field({ description: "Request wish date to travel" })
+  @Field(() => Date, { description: "Request wish date to travel" })
   travelDate!: string
 }

@@ -1,6 +1,6 @@
 export interface RegistryViolationInputModel {
   passport: number
   description: string
-  occurredAt: Date
+  occurredAt: string | Date
   severity: number
 }

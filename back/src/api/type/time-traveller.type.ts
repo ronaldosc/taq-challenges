@@ -1,4 +1,3 @@
-import { Min } from "class-validator"
 import { Field, ID, Int, ObjectType } from "type-graphql"
 import { TimeTravellerModel } from "../../domain/model"
 
@@ -11,10 +10,9 @@ export class TimeTraveller implements TimeTravellerModel {
   @Field(() => String)
   name!: string
 
-  @Field(() => String)
+  @Field(() => Date)
   birth!: string
   
   @Field(() => Int)
-  @Min(1)
   passport!: number
 }

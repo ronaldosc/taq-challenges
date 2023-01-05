@@ -14,4 +14,7 @@ export class Violation implements ViolationModel {
 
   @Field(() => Int, { description: "Infraction severity grade" })
   severity!: number
+
+  @Field(() => Date)
+  occurredAt!: string
 }

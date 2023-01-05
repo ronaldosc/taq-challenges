@@ -15,3 +15,10 @@ export const InfractionSeverityGraded: Record<SeverityGrade, SeverityModel> = {
   highest:
     { grade: 12, text: "highest level severity infraction" }
 }
+
+
+/*
+import { InfractionSeverityGraded } from "./path/to/file"
+const severity: SeverityModel = InfractionSeverityGraded.high
+console.log(severity) // { grade: 7, text: "high level severity infraction" }
+*/

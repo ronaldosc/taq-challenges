@@ -1,6 +1,7 @@
 export interface TravellerViolationModel {
   id: string
   description: string
+  occurredAt: string | Date
   severity: number
 }
 
@@ -9,6 +10,3 @@ export interface ViolationModel extends TravellerViolationModel {
 }
 
 export type GetTravellerViolationsInputModel = Pick<ViolationModel, "passport">
-
-
-//TODO buscar por todos os ViolationModel pois era o nome da primeira interface. E talvez renomear essa primeira para "(get)TravellerViolationsResponseModel"

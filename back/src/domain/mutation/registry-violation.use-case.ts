@@ -1,38 +1,42 @@
 import { SeverityDataSource, TimeTravellerDataSource, ViolationDataSource } from "../../data/source";
 import { RegistryViolationInputModel, ViolationModel } from "../model";
 
-export const registryViolationUseCase = async (
-  input: RegistryViolationInputModel
-  ): Promise<ViolationModel> => {
-  const timeTravellerRepository = new TimeTravellerDataSource();
-  const violationRepository = new ViolationDataSource();
-  const severityRepository = new SeverityDataSource();
+export class RegistryViolationUseCase {
+  readonly timeTravellerRepository = new TimeTravellerDataSource()
+  readonly violationRepository = new ViolationDataSource()
+  readonly severityRepository = new SeverityDataSource()
 
-  const timeTraveller = await timeTravellerRepository.findOneByPassport(input.passport);
+  async exec(input: RegistryViolationInputModel): Promise<ViolationModel> {
+    const { description, occurredAt, passport, severity } = input,
+      timeTraveller = await this.timeTravellerRepository.findOneByPassport(passport);
 
-  if (!timeTraveller) {
-    throw new Error(`Usuário com o passaporte nº ${input.passport} não existe.`)
-  }
+    if (!timeTraveller) {
+      throw new Error(`Usuário com o passaporte nº ${passport} não existe.`)
+    }
 
-  const severity = await severityRepository.findOneByGrade(input.severity);
+    if (!new Date(occurredAt)?.getTime()) {
+      throw new Error(`A data informada para a ocorrência ${occurredAt} não é válida.`)
+    }
 
-  if (!severity) {
-    throw new Error(
-      `Infração com gravidade nível ${input.severity} inexistente.`
-    )
-  }
+    const severityGrade = await this.severityRepository.findOneByGrade(severity);
 
-  const violation = await violationRepository.save({
-    description: input.description,
-    occurred_at: new Date(input.occurredAt),
-    time_traveller: timeTraveller,
-    severity
-  })
+    if (!severityGrade) {
+      throw new Error(`Infração com gravidade nível ${severity} inexistente.`)
+    }
+    /////////////     AJUSTAR AQUI POIS O SEVERITY ESTÁ TIPADO e conflito de nomes aqui ?
+    const violation = await this.violationRepository.save({
+      description,
+      occurred_at: new Date(occurredAt),
+      time_traveller: timeTraveller,
+      severity: severityGrade
+    })
 
-  return {
-    description: violation.description,
-    id: violation.id,
-    severity: severity.grade,
-    passport: timeTraveller.passport
+    return {
+      description,
+      id: violation.id,
+      occurredAt: violation.occurred_at,
+      passport: timeTraveller.passport,
+      severity: severityGrade.grade
+    }
   }
 }

@@ -1,18 +1,17 @@
 import { TimeTravellerDataSource } from "../../data/source"
-import { GetTravellerInfoInputModel } from "../model"
+import { GetTravellerInfoInputModel, TimeTravellerModel } from "../model"
 
-export const getTravellerInfoUseCase = async (
-  data: GetTravellerInfoInputModel
-)=> {
-  const repository = new TimeTravellerDataSource()
+export class GetTravellerInfoUseCase {
+  readonly repository = new TimeTravellerDataSource()
 
-  const getTraveller = await repository.findOneByPassport(data.passport)
+  async exec(data: GetTravellerInfoInputModel): Promise<TimeTravellerModel> {
+    const { passport } = data,
+      getTraveller = await this.repository.findOneByPassport(passport)
 
-  if (!getTraveller) {
-    throw new Error(
-      `Usuário com o passaporte nº ${data.passport} não cadastrado.`
-    )
+    if (!getTraveller) {
+      throw new Error(`Usuário com o passaporte nº ${passport} não cadastrado.`)
+    }
+
+    return getTraveller
   }
-
-  return getTraveller
 }
