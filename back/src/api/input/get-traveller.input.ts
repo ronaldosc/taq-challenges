@@ -3,6 +3,7 @@ import { GetTravellerInfoInputModel } from "../../domain/model"
 
 @InputType()
 export class GetTravellerInfoInput implements GetTravellerInfoInputModel {
-  @Field(() => Int, { description: "Time traveller's passport" })
+
+  @Field(() => Int, { description: "Time traveller's passport", nullable: false })
   passport!: number
 }

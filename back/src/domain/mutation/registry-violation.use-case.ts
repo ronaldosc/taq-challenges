@@ -32,6 +32,7 @@ export const registryViolationUseCase = async (
   return {
     description: violation.description,
     id: violation.id,
-    severity: severity.grade
+    severity: severity.grade,
+    passport: timeTraveller.passport
   }
 }

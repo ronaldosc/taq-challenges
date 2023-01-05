@@ -1,26 +1,31 @@
-import { Arg, Mutation, Query, Resolver } from "type-graphql"
+import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql"
 import {
-    getTravellerViolationsInfoUseCase,
-    registryViolationUseCase
+  getTravellerViolationsInfoUseCase,
+  registryViolationUseCase
 } from "../domain"
-import { ViolationModel } from "../domain/model"
+import { TravellerViolationModel, ViolationModel } from "../domain/model"
+import { ServerContext } from "../domain/model/server-context.model"
 import { GetTravellerViolationsInput, RegistryViolationInput } from "./input"
-import { Violation } from "./type"
+import { TravellerViolation, Violation } from "./type"
 
 @Resolver()
 export class ViolationsResolver {
 
-  @Query(() => Violation)
+  @Query(() => [TravellerViolation])
+  @Authorized()
   getTravellerViolationsInfo(
     @Arg("data") data: GetTravellerViolationsInput
-  ): Promise<ViolationModel[]> {
+  ): Promise<TravellerViolationModel[]> {
     return getTravellerViolationsInfoUseCase(data)
   }
   
   @Mutation(() => Violation)
+  @Authorized()
   registryViolation(
+    @Ctx() context: ServerContext,
     @Arg("input") input: RegistryViolationInput
   ): Promise<ViolationModel> {
+    console.log(context);
     return registryViolationUseCase(input)
   }
 }

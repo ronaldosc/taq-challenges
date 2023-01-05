@@ -1,13 +1,10 @@
 import { Field, ID, Int, ObjectType } from "type-graphql"
-import { ViolationModel } from "../../domain/model"
+import { TravellerViolationModel } from "../../domain/model"
 
 @ObjectType()
-export class Violation implements ViolationModel {
+export class TravellerViolation implements TravellerViolationModel {
   @Field(() => ID, { nullable: true, description: "Time traveller's violation identifier" })
   id!: string
-
-  @Field(() => Int, { description: "Time traveller's passaport" })
-  passport!: number
 
   @Field({ description: "Infraction's brief description" })
   description!: string

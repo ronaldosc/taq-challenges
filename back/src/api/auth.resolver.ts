@@ -6,6 +6,7 @@ import { LoginResponse } from "./type"
 
 @Resolver()
 export class LoginResolver {
+
   @Mutation(() => LoginResponse)
   login(@Arg("input") input: LoginInput): Promise<LoginResponseModel> {
     return loginUseCase(input)
