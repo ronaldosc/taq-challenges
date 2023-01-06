@@ -26,7 +26,7 @@ const app = express()
         if (!!birth && !!id && !!name && !!passport) {
           return true
         }
-        throw new Error()
+        throw new Error("ID")
       } catch {
         throw new Error("Usuário sem credenciais válidas!")
       }
@@ -38,10 +38,10 @@ const app = express()
 
     formatError: (error: GraphQLFormattedError) => {
       const { message, locations, path, extensions } = error
-      let tracesKey = Object.values(extensions!).toString()
+      const tracesKey = Object.values(extensions!).toString()
       if (tracesKey.includes("GraphQLError")) {
         console.error(
-          ">  Some error occurred in processing request and/or GraphQL  <"
+          " >  Some error occurred in processing request and/or GraphQL  < \n"
         )
         return { message, locations, path, extensions }
       }
@@ -53,7 +53,7 @@ const app = express()
   await apolloServer.start()
 
   app.use(
-    env.PATH!,
+    env.PATHTO!,
     express.json(),
     expressMiddleware(apolloServer, {
       context: async ({ req }) => {
@@ -66,5 +66,5 @@ const app = express()
 })()
 
 app.listen(env.PORT || 3000, () => {
-  console.log(`http://${env.HOST}:%d${env.PATH}`, env.PORT || 3000)
+  console.log(`http://${env.HOST}:%d${env.PATHTO}`, env.PORT || 3000)
 })
