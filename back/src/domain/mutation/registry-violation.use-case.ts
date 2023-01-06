@@ -2,13 +2,13 @@ import { SeverityDataSource, TimeTravellerDataSource, ViolationDataSource } from
 import { RegistryViolationInputModel, ViolationModel } from "../model";
 
 export class RegistryViolationUseCase {
-  readonly timeTravellerRepository = new TimeTravellerDataSource()
-  readonly violationRepository = new ViolationDataSource()
-  readonly severityRepository = new SeverityDataSource()
+  private readonly timeTravellerRepository = new TimeTravellerDataSource()
+  private readonly violationRepository = new ViolationDataSource()
+  private readonly severityRepository = new SeverityDataSource()
 
   async exec(input: RegistryViolationInputModel): Promise<ViolationModel> {
-    const { description, occurredAt, passport, severity } = input,
-      timeTraveller = await this.timeTravellerRepository.findOneByPassport(passport);
+    const { description, occurredAt, passport, severity } = input
+    const timeTraveller = await this.timeTravellerRepository.findOneByPassport(passport);
 
     if (!timeTraveller) {
       throw new Error(`Usuário com o passaporte nº ${passport} não existe.`)
@@ -23,7 +23,7 @@ export class RegistryViolationUseCase {
     if (!severityGrade) {
       throw new Error(`Infração com gravidade nível ${severity} inexistente.`)
     }
-    /////////////     AJUSTAR AQUI POIS O SEVERITY ESTÁ TIPADO e conflito de nomes aqui ?
+    //TODO  AJUSTAR AQUI POIS O SEVERITY ESTÁ TIPADO e conflito de nomes aqui ?
     const violation = await this.violationRepository.save({
       description,
       occurred_at: new Date(occurredAt),

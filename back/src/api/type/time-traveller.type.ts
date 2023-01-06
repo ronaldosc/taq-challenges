@@ -7,10 +7,10 @@ export class TimeTraveller implements TimeTravellerModel {
   @Field(() => ID, { nullable: true, description: "Time traveller ID" })
   id?: string
 
-  @Field(() => String)
+  @Field()
   name!: string
 
-  @Field(() => Date)
+  @Field()
   birth!: string
   
   @Field(() => Int)

@@ -26,10 +26,17 @@ export class TimeTravellerDataSource {
     })
   }
 
-  save(timeTraveller: TimeTravellerModel & { password: string; salt: string }) {
-    return this.timeTravellerRepository.save({
-      ...timeTraveller,
-      last_login_at: new Date()
-    })
+  loginUpdateOrUpdate(timeTraveller: TimeTravellerModel & { password: string; salt: string })
+  {
+    if (timeTraveller.id)
+    {
+      return this.timeTravellerRepository.save(
+        {
+          ...timeTraveller,
+          last_login_at: new Date()
+        }
+      )
+    }
+    return this.timeTravellerRepository.save({...timeTraveller})
   }
 }

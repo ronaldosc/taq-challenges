@@ -5,7 +5,7 @@ import {
   VerifyTravelPossibilityUseCase
 } from "../domain"
 import {
-  ServerContext, TimeTravellerModel,
+  TimeTravellerModel,
   TravelPossibilityResponseModel
 } from "../domain/model"
 import {
@@ -20,7 +20,7 @@ export class TimeTravellerResolver {
   @Query(() => TimeTraveller)
   @Authorized()
   getTravellerInfo(
-    @Ctx() _context: ServerContext,
+    @Ctx()
     @Arg("data") data: GetTravellerInfoInput
   ): Promise<TimeTravellerModel> {
     return new GetTravellerInfoUseCase().exec(data)
@@ -36,7 +36,7 @@ export class TimeTravellerResolver {
   @Mutation(() => TravelPossibilityResponse)
   @Authorized()
   verifyTravelPossibility(
-    @Ctx() _context: ServerContext,
+    @Ctx()
     @Arg("input") input: VerifyTimeTravelPossibilityInput
   ): Promise<TravelPossibilityResponseModel> {
     return new VerifyTravelPossibilityUseCase().exec(input)

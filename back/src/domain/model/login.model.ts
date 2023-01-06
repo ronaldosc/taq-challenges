@@ -7,5 +7,5 @@ export interface LoginInputModel {
 export interface LoginResponseModel {
   token: string
   timeTraveller: TimeTraveller
-  lastLoginAt?: string | Date
+  lastLoginAt?: string
 }

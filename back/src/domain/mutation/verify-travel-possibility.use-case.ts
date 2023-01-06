@@ -6,15 +6,19 @@ import {
 } from "../model"
 
 export class VerifyTravelPossibilityUseCase {
-  readonly timeTravellerRepository = new TimeTravellerDataSource()
-  readonly violationRepository = new ViolationDataSource()
+  private readonly timeTravellerRepository = new TimeTravellerDataSource()
+  private readonly violationRepository = new ViolationDataSource()
 
   async exec(
     input: VerifyTimeTravelPossibilityInputModel
   ): Promise<TravelPossibilityResponseModel> {
     const { passport, travelDate } = input
+    const dateFor = {
+      today: new Date(),
+      travel: new Date(travelDate)
+    }
 
-    if (!new Date(travelDate)?.getTime()) {
+    if (!dateFor.today.getTime()) {
       throw new Error(`A data ${travelDate} não é válida.`)
     }
 
@@ -26,7 +30,7 @@ export class VerifyTravelPossibilityUseCase {
       throw new Error(`Usuário com o passaporte nº ${passport} não existe.`)
     }
 
-    if (new Date(timeTraveller.birth) > new Date(travelDate)) {
+    if (new Date(timeTraveller.birth) > dateFor.today) {
       return {
         message:
           "Não é possível viajar para antes da data de nascimento de um viajante.",
@@ -38,13 +42,13 @@ export class VerifyTravelPossibilityUseCase {
       timeTraveller.id
     )
 
-    const sumGrades = violations.reduce((acum, violation) => {
+    const sumGrades = violations.reduce((acum, { occurred_at, severity }) => {
+      const dateOccurred = new Date(occurred_at)
       if (
-        new Date(violation.occurred_at) < new Date() &&
-        new Date(violation.occurred_at).getTime() >
-          Date.now() - 3600 * 24 * 365 * 1000
+        dateOccurred < dateFor.today &&
+        dateOccurred.getTime() > Date.now() - 3600 * 24 * 365 * 1000
       ) {
-        return acum + violation.severity.grade
+        return acum + severity.grade
       } else {
         return acum
       }
@@ -58,15 +62,16 @@ export class VerifyTravelPossibilityUseCase {
       }
     }
 
-    const rangeDates = {
-        start: sub(new Date(), { years: 1 }),
-        end: add(new Date(), { years: 1 })
-      },
-      violationsOccurredInRange =
-        await this.violationRepository.findByDateRange(
-          rangeDates.start,
-          rangeDates.end
-        )
+    const dateRange = {
+      start: sub(dateFor.today, { years: 1 }),
+      end: add(dateFor.today, { years: 1 })
+    }
+
+    const violationsOccurredInRange =
+      await this.violationRepository.findByDateRange(
+        dateRange.start,
+        dateRange.end
+      )
 
     if (violationsOccurredInRange) {
       return {

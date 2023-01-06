@@ -8,11 +8,10 @@ export class LoginResponse implements LoginResponseModel {
   @Field({ description: "Session token with an expiration timeout"})
   token!: string
 
-/////////////////////////////
   @Field(() => TimeTravellerType, { description: "Information about time traveller's entity"})
   timeTraveller!: TimeTraveller
-////////////////////////////
 
-  @Field(() => Date, { description: "Last it has logged in datetime"})
+  @Field({ description: "Last it has logged in datetime"})
   lastLoginAt?: string
 }
+//TODO checar TimeTraveller aqui quanto ao retorno e tipagem, e a 'referencia cruzada com o ObjectType

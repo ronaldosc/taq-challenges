@@ -4,7 +4,6 @@ import {
   RegistryViolationUseCase
 } from "../domain"
 import {
-  ServerContext,
   TravellerViolationModel,
   ViolationModel
 } from "../domain/model"
@@ -16,7 +15,7 @@ export class ViolationsResolver {
   @Query(() => [TravellerViolation])
   @Authorized()
   getTravellerViolationsInfo(
-    @Ctx() _context: ServerContext,
+    @Ctx()
     @Arg("data") data: GetTravellerViolationsInput
   ): Promise<TravellerViolationModel[]> {
     return new GetTravellerViolationsInfoUseCase().exec(data)
@@ -25,7 +24,7 @@ export class ViolationsResolver {
   @Mutation(() => Violation)
   @Authorized()
   registryViolation(
-    @Ctx() _context: ServerContext,
+    @Ctx()
     @Arg("input") input: RegistryViolationInput
   ): Promise<ViolationModel> {
     return new RegistryViolationUseCase().exec(input)
