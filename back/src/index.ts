@@ -2,6 +2,7 @@ import { ApolloServer } from "@apollo/server"
 import { expressMiddleware } from "@apollo/server/express4"
 import express from "express"
 import { GraphQLFormattedError } from "graphql"
+import { env } from "node:process"
 import "reflect-metadata"
 import { buildSchema } from "type-graphql"
 import { LoginResolver, TimeTravellerResolver, ViolationsResolver } from "./api"
@@ -21,17 +22,10 @@ const app = express()
       }
 
       try {
-        const decodedToken = verifyToken(context.token)
-
-        if (
-          !!decodedToken?.birth &&
-          !!decodedToken.id &&
-          !!decodedToken.name &&
-          !!decodedToken.passport
-        ) {
+        const { birth, id, name, passport } = verifyToken(context.token)!
+        if (!!birth && !!id && !!name && !!passport) {
           return true
         }
-
         throw new Error()
       } catch {
         throw new Error("Usuário sem credenciais válidas!")
@@ -59,7 +53,7 @@ const app = express()
   await apolloServer.start()
 
   app.use(
-    "/graphql",
+    env.PATH!,
     express.json(),
     expressMiddleware(apolloServer, {
       context: async ({ req }) => {
@@ -71,6 +65,6 @@ const app = express()
   await dbConfig()
 })()
 
-app.listen(process.env.PORT || 3000, () => {
-  console.log(`http://${process.env.HOST}:%d/graphql`, process.env.PORT || 3000)
+app.listen(env.PORT || 3000, () => {
+  console.log(`http://${env.HOST}:%d${env.PATH}`, env.PORT || 3000)
 })

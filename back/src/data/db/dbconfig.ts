@@ -1,8 +1,9 @@
+import { env } from "node:process"
 import { DataSource } from "typeorm"
 import { InfractionSeverity, TimeTraveller, Violation } from "./entities"
 require("dotenv").config()
 
-const db_URI = `postgres://postgres:${process.env.DB_PASS}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB}`
+const db_URI = `${env.DB_CONNECTION}://${env.DB_USERNAME}:${env.DB_PASS}@${env.DB_HOST}:${env.DB_PORT}/${env.DB_DATABASE}`
 
 export const dataORM = new DataSource({
   type: "postgres",
