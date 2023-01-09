@@ -1,5 +1,5 @@
 import { Field, InputType, Int } from "type-graphql"
-import { VerifyTimeTravelPossibilityInputModel } from "../../domain/model"
+import { VerifyTimeTravelPossibilityInputModel } from "@domain/model"
 
 @InputType()
 export class VerifyTimeTravelPossibilityInput
@@ -8,6 +8,6 @@ export class VerifyTimeTravelPossibilityInput
   @Field(() => Int, { description: "Time traveller's passport" })
   passport!: number
 
-  @Field(() => Date, { description: "Request wish date to travel" })
+  @Field({ description: "Request wish date to travel" })
   travelDate!: string
 }

@@ -1,13 +1,11 @@
-import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql"
 import {
   CreateTimeTravellerUseCase,
   GetTravellerInfoUseCase,
-  VerifyTravelPossibilityUseCase
-} from "../domain"
-import {
+  VerifyTravelPossibilityUseCase,
   TimeTravellerModel,
   TravelPossibilityResponseModel
-} from "../domain/model"
+} from "../domain"
+import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql"
 import {
   CreateTimeTravellerInput,
   GetTravellerInfoInput,
@@ -21,7 +19,8 @@ export class TimeTravellerResolver {
   @Authorized()
   getTravellerInfo(
     @Ctx()
-    @Arg("data") data: GetTravellerInfoInput
+    @Arg("data")
+    data: GetTravellerInfoInput
   ): Promise<TimeTravellerModel> {
     return new GetTravellerInfoUseCase().exec(data)
   }
@@ -37,7 +36,8 @@ export class TimeTravellerResolver {
   @Authorized()
   verifyTravelPossibility(
     @Ctx()
-    @Arg("input") input: VerifyTimeTravelPossibilityInput
+    @Arg("input")
+    input: VerifyTimeTravelPossibilityInput
   ): Promise<TravelPossibilityResponseModel> {
     return new VerifyTravelPossibilityUseCase().exec(input)
   }

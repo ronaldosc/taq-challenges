@@ -1,5 +1,5 @@
 import { Field, InputType, Int } from "type-graphql"
-import { LoginInputModel } from "../../domain/model"
+import { LoginInputModel } from "@domain/model"
 
 @InputType()
 export class LoginInput implements LoginInputModel {

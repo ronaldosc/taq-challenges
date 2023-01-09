@@ -1,9 +1,9 @@
+import { TimeTravellerDataSource } from "@data/source"
 import {
-  generatePasswordWithSalt,
-  generateRandomSalt
-} from "../../core/security"
-import { TimeTravellerDataSource } from "../../data/source"
-import { CreateTimeTravellerInputModel, TimeTravellerModel } from "../model"
+  CreateTimeTravellerInputModel,
+  TimeTravellerModel
+} from "@domain/model"
+import { generatePasswordWithSalt, generateRandomSalt } from "@security"
 
 export class CreateTimeTravellerUseCase {
   private readonly repository = new TimeTravellerDataSource()
@@ -21,14 +21,14 @@ export class CreateTimeTravellerUseCase {
         `Usuário com o passaporte nº ${passport} já possui cadastro.`
       )
     }
-  //FIX: não é mais possível registro de nascimento de data futura
+
     if (!birthdate.getTime() || Date.now() - birthdate.getTime() < 0) {
-      throw new Error(`A data de nascimento ${birth} não é válida.`)
+      throw new Error(`A data de nascimento '${birth}' não é válida.`)
     }
 
     const hashedPassword = generatePasswordWithSalt(password, this.salt)
 
-    return this.repository.loginUpdateOrUpdate({
+    return this.repository.loginUpset({
       name,
       birth: birthdate.toJSON(),
       passport,

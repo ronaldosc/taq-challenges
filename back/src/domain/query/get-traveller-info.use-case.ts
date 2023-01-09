@@ -1,5 +1,5 @@
-import { TimeTravellerDataSource } from "../../data/source"
-import { GetTravellerInfoInputModel, TimeTravellerModel } from "../model"
+import { TimeTravellerDataSource } from "@data/source"
+import { GetTravellerInfoInputModel, TimeTravellerModel } from "@domain/model"
 
 export class GetTravellerInfoUseCase {
   private readonly repository = new TimeTravellerDataSource()

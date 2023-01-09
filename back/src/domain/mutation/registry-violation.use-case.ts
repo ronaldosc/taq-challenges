@@ -1,5 +1,9 @@
-import { SeverityDataSource, TimeTravellerDataSource, ViolationDataSource } from "../../data/source";
-import { RegistryViolationInputModel, ViolationModel } from "../model";
+import {
+  SeverityDataSource,
+  TimeTravellerDataSource,
+  ViolationDataSource
+} from "@data/source"
+import { RegistryViolationInputModel, ViolationModel } from "@domain/model"
 
 export class RegistryViolationUseCase {
   private readonly timeTravellerRepository = new TimeTravellerDataSource()
@@ -8,17 +12,21 @@ export class RegistryViolationUseCase {
 
   async exec(input: RegistryViolationInputModel): Promise<ViolationModel> {
     const { description, occurredAt, passport, severity } = input
-    const timeTraveller = await this.timeTravellerRepository.findOneByPassport(passport);
+    const timeTraveller = await this.timeTravellerRepository.findOneByPassport(
+      passport
+    )
 
     if (!timeTraveller) {
       throw new Error(`Usuário com o passaporte nº ${passport} não existe.`)
     }
 
     if (!new Date(occurredAt)?.getTime()) {
-      throw new Error(`A data informada para a ocorrência ${occurredAt} não é válida.`)
+      throw new Error(
+        `A data informada para a ocorrência ${occurredAt} não é válida.`
+      )
     }
 
-    const severityGrade = await this.severityRepository.findOneByGrade(severity);
+    const severityGrade = await this.severityRepository.findOneByGrade(severity)
 
     if (!severityGrade) {
       throw new Error(`Infração com gravidade nível ${severity} inexistente.`)

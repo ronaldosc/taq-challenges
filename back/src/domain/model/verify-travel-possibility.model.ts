@@ -3,6 +3,6 @@ export interface VerifyTimeTravelPossibilityInputModel {
   travelDate: string | Date
 }
 export interface TravelPossibilityResponseModel {
-  message: string
   possibility: boolean
+  message: string
 }

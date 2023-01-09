@@ -1,14 +1,14 @@
 import { ApolloServer } from "@apollo/server"
 import { expressMiddleware } from "@apollo/server/express4"
+import { ServerContext } from "@domain/model"
+import { verifyToken } from "@security"
 import express from "express"
 import { GraphQLFormattedError } from "graphql"
 import { env } from "node:process"
-import "reflect-metadata"
+// import "reflect-metadata"
 import { buildSchema } from "type-graphql"
 import { LoginResolver, TimeTravellerResolver, ViolationsResolver } from "./api"
-import { verifyToken } from "./core/security"
 import { dbConfig } from "./data/db/dbconfig"
-import { ServerContext } from "./domain/model"
 require("dotenv").config()
 
 const app = express()
@@ -20,13 +20,12 @@ const app = express()
       if (!context.token) {
         throw new Error("Usuário sem credenciais válidas!")
       }
-
       try {
         const { birth, id, name, passport } = verifyToken(context.token)!
-        if (!!birth && !!id && !!name && !!passport) {
-          return true
+        if (!birth && !id && !name && !passport) {
+          throw new Error()
         }
-        throw new Error("ID")
+        return true
       } catch {
         throw new Error("Usuário sem credenciais válidas!")
       }
@@ -35,22 +34,21 @@ const app = express()
 
   const apolloServer = new ApolloServer<ServerContext>({
     schema,
-
     formatError: (error: GraphQLFormattedError) => {
       const { message, locations, path, extensions } = error
       const tracesKey = Object.values(extensions!).toString()
       if (tracesKey.includes("GraphQLError")) {
         console.error(
-          " >  Some error occurred in processing request and/or GraphQL  < \n"
+          ">  Some error occurred in GraphQL and/or processing request  < \n"
         )
         return { message, locations, path, extensions }
       }
       return { message }
-      // se for o erro for emitido por GraphQLError ele exibirá informação completa
     }
   })
 
   await apolloServer.start()
+  await dbConfig()
 
   app.use(
     env.PATHTO!,
@@ -61,8 +59,6 @@ const app = express()
       }
     })
   )
-
-  await dbConfig()
 })()
 
 app.listen(env.PORT || 3000, () => {

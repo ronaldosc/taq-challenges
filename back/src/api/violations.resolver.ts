@@ -1,12 +1,10 @@
-import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql"
 import {
   GetTravellerViolationsInfoUseCase,
-  RegistryViolationUseCase
-} from "../domain"
-import {
+  RegistryViolationUseCase,
   TravellerViolationModel,
   ViolationModel
-} from "../domain/model"
+} from "../domain"
+import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql"
 import { GetTravellerViolationsInput, RegistryViolationInput } from "./input"
 import { TravellerViolation, Violation } from "./type"
 
@@ -16,7 +14,8 @@ export class ViolationsResolver {
   @Authorized()
   getTravellerViolationsInfo(
     @Ctx()
-    @Arg("data") data: GetTravellerViolationsInput
+    @Arg("data")
+    data: GetTravellerViolationsInput
   ): Promise<TravellerViolationModel[]> {
     return new GetTravellerViolationsInfoUseCase().exec(data)
   }
@@ -25,7 +24,8 @@ export class ViolationsResolver {
   @Authorized()
   registryViolation(
     @Ctx()
-    @Arg("input") input: RegistryViolationInput
+    @Arg("input")
+    input: RegistryViolationInput
   ): Promise<ViolationModel> {
     return new RegistryViolationUseCase().exec(input)
   }

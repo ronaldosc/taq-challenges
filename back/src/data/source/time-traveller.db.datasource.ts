@@ -1,5 +1,5 @@
+import { TimeTravellerModel } from "@domain/model"
 import { Repository } from "typeorm"
-import { TimeTravellerModel } from "../../domain/model"
 import { dataORM } from "../db/dbconfig"
 import { TimeTraveller } from "../db/entities"
 
@@ -26,7 +26,7 @@ export class TimeTravellerDataSource {
     })
   }
 
-  loginUpdateOrUpdate(timeTraveller: TimeTravellerModel & { password: string; salt: string })
+  loginUpset(timeTraveller: TimeTravellerModel & { password: string; salt: string })
   {
     if (timeTraveller.id)
     {

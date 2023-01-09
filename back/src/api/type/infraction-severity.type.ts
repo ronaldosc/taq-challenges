@@ -1,5 +1,5 @@
+import { SeverityModel } from "@domain/model"
 import { Field, Int, ObjectType } from "type-graphql"
-import { SeverityModel } from "../../domain/model"
 
 @ObjectType()
 export class Severity implements SeverityModel {

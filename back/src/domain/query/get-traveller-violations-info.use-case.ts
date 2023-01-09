@@ -1,8 +1,8 @@
-import { TimeTravellerDataSource, ViolationDataSource } from "../../data/source"
+import { TimeTravellerDataSource, ViolationDataSource } from "@data/source"
 import {
   GetTravellerViolationsInputModel,
   TravellerViolationModel
-} from "../model"
+} from "@domain/model"
 
 export class GetTravellerViolationsInfoUseCase {
   private readonly timeTravellerRepository = new TimeTravellerDataSource()

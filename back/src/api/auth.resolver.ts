@@ -1,6 +1,5 @@
 import { Arg, Mutation, Resolver } from "type-graphql"
-import { LoginUseCase } from "../domain"
-import { LoginResponseModel } from "../domain/model"
+import { LoginResponseModel, LoginUseCase } from "../domain"
 import { LoginInput } from "./input"
 import { LoginResponse } from "./type"
 

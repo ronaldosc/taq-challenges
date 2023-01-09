@@ -1,5 +1,5 @@
+import { ViolationModel } from "@domain/model"
 import { Field, ID, Int, ObjectType } from "type-graphql"
-import { ViolationModel } from "../../domain/model"
 
 @ObjectType()
 export class Violation implements ViolationModel {

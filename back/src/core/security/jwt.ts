@@ -1,6 +1,6 @@
 import * as jwt from "jsonwebtoken"
 import { env } from "node:process"
-import { TimeTravellerModel } from "../../domain/model"
+import { TimeTravellerModel } from "@domain/model"
 require("dotenv").config()
 
 export const createToken = (payload: {

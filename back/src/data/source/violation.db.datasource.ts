@@ -21,7 +21,7 @@ export class ViolationDataSource {
     })
   }
 
-  findByDateRange(startDate: Date, endDate: Date) {
+  findByDateRange(startDate: number | Date, endDate: number | Date) {
     return this.violationRepository
       .createQueryBuilder("violation")
       .where("violation.occurred_at >= :startDate", { startDate })

@@ -1,5 +1,5 @@
+import { RegistryViolationInputModel } from "@domain/model"
 import { Field, InputType, Int } from "type-graphql"
-import { RegistryViolationInputModel } from "../../domain/model"
 
 @InputType()
 export class RegistryViolationInput implements RegistryViolationInputModel {
