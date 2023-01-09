@@ -1,11 +1,9 @@
+import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql"
 import {
   CreateTimeTravellerUseCase,
-  GetTravellerInfoUseCase,
-  VerifyTravelPossibilityUseCase,
-  TimeTravellerModel,
-  TravelPossibilityResponseModel
+  GetTravellerInfoUseCase, TimeTravellerModel,
+  TravelPossibilityResponseModel, VerifyTravelPossibilityUseCase
 } from "../domain"
-import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql"
 import {
   CreateTimeTravellerInput,
   GetTravellerInfoInput,

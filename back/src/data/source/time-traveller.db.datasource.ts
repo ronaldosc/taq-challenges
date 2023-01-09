@@ -1,7 +1,7 @@
+import { dataORM } from "@data/db/dbconfig"
 import { TimeTravellerModel } from "@domain/model"
+import { TimeTraveller } from "@entities"
 import { Repository } from "typeorm"
-import { dataORM } from "../db/dbconfig"
-import { TimeTraveller } from "../db/entities"
 
 export class TimeTravellerDataSource {
   private readonly timeTravellerRepository: Repository<TimeTraveller> =

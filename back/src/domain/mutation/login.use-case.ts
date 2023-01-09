@@ -1,6 +1,6 @@
-import { createToken, generatePasswordWithSalt } from "@security"
 import { TimeTravellerDataSource } from "@data/source"
 import { LoginInputModel, LoginResponseModel } from "@domain/model"
+import { createToken, generatePasswordWithSalt } from "@security"
 require("dotenv").config()
 
 export class LoginUseCase {
@@ -23,15 +23,13 @@ export class LoginUseCase {
     const localeDateTime = new Intl.DateTimeFormat("pt-BR", {
       dateStyle: "medium",
       timeStyle: "long",
-      timeZone: "America/Sao_Paulo"
+      timeZone: new Intl.DateTimeFormat().resolvedOptions().timeZone
     })
     let lastLoggedIn: string
 
-    if (last_login_at) {
-      lastLoggedIn = localeDateTime.format(last_login_at)
-    } else {
-      lastLoggedIn = "Este é o primeiro acesso."
-    }
+    last_login_at
+      ? (lastLoggedIn = localeDateTime.format(last_login_at))
+      : (lastLoggedIn = "Este é o primeiro acesso.")
 
     const token = createToken({ timeTraveller: { id, name, passport, birth } })
 

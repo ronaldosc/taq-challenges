@@ -1,5 +1,5 @@
 import { LoginResponseModel } from "@domain/model"
-import { TimeTraveller } from "data/db/entities"
+import { TimeTraveller } from "@entities"
 import { Field, ObjectType } from "type-graphql"
 import { TimeTraveller as TimeTravellerType } from "./time-traveller.type"
 

@@ -1,10 +1,10 @@
+import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql"
 import {
   GetTravellerViolationsInfoUseCase,
   RegistryViolationUseCase,
   TravellerViolationModel,
   ViolationModel
 } from "../domain"
-import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql"
 import { GetTravellerViolationsInput, RegistryViolationInput } from "./input"
 import { TravellerViolation, Violation } from "./type"
 

@@ -1,6 +1,6 @@
+import { dataORM } from "@data/db/dbconfig"
+import { Violation } from "@entities"
 import { Repository } from "typeorm"
-import { dataORM } from "../db/dbconfig"
-import { Violation } from "../db/entities"
 
 export class ViolationDataSource {
   private readonly violationRepository: Repository<Violation> =

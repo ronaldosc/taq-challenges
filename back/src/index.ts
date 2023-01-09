@@ -6,9 +6,9 @@ import express from "express"
 import { GraphQLFormattedError } from "graphql"
 import { env } from "node:process"
 // import "reflect-metadata"
+import { dbConfig } from "@data/db/dbconfig"
 import { buildSchema } from "type-graphql"
 import { LoginResolver, TimeTravellerResolver, ViolationsResolver } from "./api"
-import { dbConfig } from "./data/db/dbconfig"
 require("dotenv").config()
 
 const app = express()

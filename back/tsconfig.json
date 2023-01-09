@@ -17,7 +17,7 @@
     "typeRoots": ["./node_modules/@types"],
     "baseUrl": "./src",
     "paths": {
-      "entities": ["data/db/entities"],
+      "@entities": ["data/db/entities"],
       "@domain/*": ["domain/*"],
       "@security": ["core/security"],
       "@data/*": ["data/*", "data/db/entities"]
