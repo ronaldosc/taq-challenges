@@ -1,14 +1,15 @@
-import { dataORM } from "@data/db/dbconfig"
-import { TimeTravellerModel } from "@domain/model"
-import { TimeTraveller } from "@entities"
-import { Repository } from "typeorm"
+import { dataORM } from "@data/db/dbconfig";
+import { TimeTravellerModel } from "@domain/model";
+import { TimeTraveller } from "@entities";
+import { Repository } from "typeorm";
+import { Service } from "typedi";
 
+@Service()
 export class TimeTravellerDataSource {
-  private readonly timeTravellerRepository: Repository<TimeTraveller> =
-    dataORM.getRepository(TimeTraveller)
+  private readonly timeTravellerRepository: Repository<TimeTraveller> = dataORM.getRepository(TimeTraveller);
 
   findOneById(id: string) {
-    return this.timeTravellerRepository.findOne({ where: { id } })
+    return this.timeTravellerRepository.findOne({ where: { id } });
   }
 
   findOneByPassport(passport: number) {
@@ -21,22 +22,18 @@ export class TimeTravellerDataSource {
         passport: true,
         password: true,
         salt: true,
-        last_login_at: true
-      }
-    })
+        last_login_at: true,
+      },
+    });
   }
 
-  loginUpsert(timeTraveller: TimeTravellerModel & { password: string; salt: string })
-  {
-    if (timeTraveller.id)
-    {
-      return this.timeTravellerRepository.save(
-        {
-          ...timeTraveller,
-          last_login_at: new Date()
-        }
-      )
+  loginUpsert(timeTraveller: TimeTravellerModel & { password: string; salt: string }) {
+    if (timeTraveller.id) {
+      return this.timeTravellerRepository.save({
+        ...timeTraveller,
+        last_login_at: new Date(),
+      });
     }
-    return this.timeTravellerRepository.save({...timeTraveller})
+    return this.timeTravellerRepository.save({ ...timeTraveller });
   }
 }

@@ -1,25 +1,30 @@
 import * as jwt from "jsonwebtoken"
-import { env } from "node:process"
 import { TimeTravellerModel } from "@domain/model"
-require("dotenv").config()
+import { Inject } from 'typedi';
+import { SECRET } from '@code/env/env.config';
 
-export const createToken = (payload: {
-  timeTraveller: TimeTravellerModel
-}): string => {
-  const secret = env.SECRET!
-  const expiresIn = "1h"
-  const token = jwt.sign(payload, secret, { expiresIn })
 
-  return token
-}
+@Service()
+export class JwtService {
+  constructor(@Inject(SECRET) private readonly secret: string) {}
 
-export const verifyToken = (token: string): TimeTravellerModel | undefined => {
-  const secret = env.SECRET!
-  const decodedToken = jwt.verify(token, secret)
-
-  if (decodedToken) {
-    return (decodedToken as any).timeTraveller
+  createToken(payload: {
+    timeTraveller: TimeTravellerModel
+  }): string {
+    const expiresIn = "1h"
+    const token = jwt.sign(payload, this.secret, { expiresIn })
+  
+    return token
   }
-
-  return
+  
+  verifyToken(token: string): TimeTravellerModel | undefined {
+    const decodedToken = jwt.verify(token, this.secret)
+  
+    if (decodedToken) {
+      return (decodedToken as any).timeTraveller
+    }
+  
+    return
+  }
+  
 }

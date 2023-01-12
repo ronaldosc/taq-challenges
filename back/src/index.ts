@@ -1,19 +1,23 @@
+import "reflect-metadata";
 import { ApolloServer } from "@apollo/server"
 import { expressMiddleware } from "@apollo/server/express4"
 import { ServerContext } from "@domain/model"
 import { verifyToken } from "@security"
 import express from "express"
-import { GraphQLFormattedError } from "graphql"
-import { env } from "node:process"
-// import "reflect-metadata"
+import { GraphQLFormattedError } from "graphql";
 import { dbConfig } from "@data/db/dbconfig"
 import { buildSchema } from "type-graphql"
 import { LoginResolver, TimeTravellerResolver, ViolationsResolver } from "./api"
-require("dotenv").config()
+import { EnvConfig, PORT, PATHTO } from '@core/env/env.config';
 
 const app = express()
 
 ;(async function () {
+  EnvConfig.config();
+  const port = Container.get(PORT);
+  const pathto = Container.get(PATHTO);
+  const host = Container.get(HOST);
+
   const schema = await buildSchema({
     resolvers: [TimeTravellerResolver, ViolationsResolver, LoginResolver],
     authChecker: ({ context }: { context: ServerContext }) => {
@@ -51,7 +55,7 @@ const app = express()
   await dbConfig()
 
   app.use(
-    env.PATHTO!,
+    pathto,
     express.json(),
     expressMiddleware(apolloServer, {
       context: async ({ req }) => {
@@ -61,6 +65,6 @@ const app = express()
   )
 })()
 
-app.listen(env.PORT || 3000, () => {
-  console.log(`http://${env.HOST}:%d${env.PATHTO}`, env.PORT || 3000)
+app.listen(port, () => {
+  console.log(`http://${host}:%d${pathto}`, port)
 })
