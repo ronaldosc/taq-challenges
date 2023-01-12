@@ -26,7 +26,7 @@ export class TimeTravellerDataSource {
     })
   }
 
-  loginUpset(timeTraveller: TimeTravellerModel & { password: string; salt: string })
+  loginUpsert(timeTraveller: TimeTravellerModel & { password: string; salt: string })
   {
     if (timeTraveller.id)
     {
