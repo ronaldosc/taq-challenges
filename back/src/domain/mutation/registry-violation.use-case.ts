@@ -1,38 +1,50 @@
-import { SeverityDataSource, TimeTravellerDataSource, ViolationDataSource } from "../../data/source";
-import { RegistryViolationInputModel, ViolationModel } from "../model";
+import {
+  SeverityDataSource,
+  TimeTravellerDataSource,
+  ViolationDataSource
+} from "@data/source"
+import { RegistryViolationInputModel, ViolationModel } from "@domain/model"
 
-export const registryViolationUseCase = async (
-  input: RegistryViolationInputModel
-  ): Promise<ViolationModel> => {
-  const timeTravellerRepository = new TimeTravellerDataSource();
-  const violationRepository = new ViolationDataSource();
-  const severityRepository = new SeverityDataSource();
+export class RegistryViolationUseCase {
+  private readonly timeTravellerRepository = new TimeTravellerDataSource()
+  private readonly violationRepository = new ViolationDataSource()
+  private readonly severityRepository = new SeverityDataSource()
 
-  const timeTraveller = await timeTravellerRepository.findOneByPassport(input.passport);
-
-  if (!timeTraveller) {
-    throw new Error(`Usuário com o passaporte nº ${input.passport} não existe.`)
-  }
-
-  const severity = await severityRepository.findOneByGrade(input.severity);
-
-  if (!severity) {
-    throw new Error(
-      `Infração com gravidade nível ${input.severity} inexistente.`
+  async exec(input: RegistryViolationInputModel): Promise<ViolationModel> {
+    const { description, occurredAt, passport, severity } = input
+    const timeTraveller = await this.timeTravellerRepository.findOneByPassport(
+      passport
     )
-  }
 
-  const violation = await violationRepository.save({
-    description: input.description,
-    occurred_at: new Date(input.occurredAt),
-    time_traveller: timeTraveller,
-    severity
-  })
+    if (!timeTraveller) {
+      throw new Error(`Usuário com o passaporte nº ${passport} não existe.`)
+    }
 
-  return {
-    description: violation.description,
-    id: violation.id,
-    severity: severity.grade,
-    passport: timeTraveller.passport
+    if (!new Date(occurredAt)?.getTime()) {
+      throw new Error(
+        `A data informada para a ocorrência ${occurredAt} não é válida.`
+      )
+    }
+
+    const severityGrade = await this.severityRepository.findOneByGrade(severity)
+
+    if (!severityGrade) {
+      throw new Error(`Infração com gravidade nível ${severity} inexistente.`)
+    }
+    //TODO  AJUSTAR AQUI POIS O SEVERITY ESTÁ TIPADO e conflito de nomes aqui ?
+    const violation = await this.violationRepository.save({
+      description,
+      occurred_at: new Date(occurredAt),
+      time_traveller: timeTraveller,
+      severity: severityGrade
+    })
+
+    return {
+      description,
+      id: violation.id,
+      occurredAt: violation.occurred_at,
+      passport: timeTraveller.passport,
+      severity: severityGrade.grade
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { TimeTraveller } from "../../data/db/entities"
+import { TimeTraveller } from "@entities"
 
 export interface LoginInputModel {
   passport: number

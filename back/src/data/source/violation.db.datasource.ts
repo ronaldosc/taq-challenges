@@ -1,6 +1,6 @@
+import { dataORM } from "@data/db/dbconfig"
+import { Violation } from "@entities"
 import { Repository } from "typeorm"
-import { dataORM } from "../db/dbconfig"
-import { Violation } from "../db/entities"
 
 export class ViolationDataSource {
   private readonly violationRepository: Repository<Violation> =
@@ -21,7 +21,7 @@ export class ViolationDataSource {
     })
   }
 
-  findByDateRange(startDate: Date, endDate: Date) {
+  findByDateRange(startDate: number | Date, endDate: number | Date) {
     return this.violationRepository
       .createQueryBuilder("violation")
       .where("violation.occurred_at >= :startDate", { startDate })

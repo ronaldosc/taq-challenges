@@ -1,34 +1,39 @@
+import { TimeTravellerDataSource } from "@data/source"
 import {
-  generatePasswordWithSalt,
-  generateRandomSalt
-} from "../../core/security";
-import { TimeTravellerDataSource } from "../../data/source";
-import { CreateTimeTravellerInputModel } from "../model";
+  CreateTimeTravellerInputModel,
+  TimeTravellerModel
+} from "@domain/model"
+import { generatePasswordWithSalt, generateRandomSalt } from "@security"
 
-export const createTimeTravellerUseCase = async (
-  input: CreateTimeTravellerInputModel
-) => {
-  const repository = new TimeTravellerDataSource();
+export class CreateTimeTravellerUseCase {
+  private readonly repository = new TimeTravellerDataSource()
+  private readonly salt = generateRandomSalt()
 
-  const traveller = await repository.findOneByPassport(input.passport);
+  async exec(
+    input: CreateTimeTravellerInputModel
+  ): Promise<TimeTravellerModel> {
+    const { birth, name, passport, password } = input
+    const traveller = await this.repository.findOneByPassport(passport)
+    const birthdate = new Date(birth)
 
-  if (traveller) {
-    throw new Error(
-      `Usuário com o passaporte nº ${input.passport} já possui cadastro.`
-    )
+    if (traveller) {
+      throw new Error(
+        `Usuário com o passaporte nº ${passport} já possui cadastro.`
+      )
+    }
+
+    if (!birthdate.getTime() || Date.now() - birthdate.getTime() < 0) {
+      throw new Error(`A data de nascimento '${birth}' não é válida.`)
+    }
+
+    const hashedPassword = generatePasswordWithSalt(password, this.salt)
+
+    return this.repository.loginUpset({
+      name,
+      birth: birthdate.toJSON(),
+      passport,
+      password: hashedPassword,
+      salt: this.salt
+    })
   }
-  if (!new Date(input.birth)?.getTime()) {
-    throw new Error(`A data de nascimento ${input.birth} não é válida.`)
-  }
-
-  const salt = generateRandomSalt()
-  const hashedPassword = generatePasswordWithSalt(input.password, salt)
-
-  return repository.save({
-    name: input.name,
-    birth: new Date(input.birth).toJSON(),
-    passport: input.passport,
-    password: hashedPassword,
-    salt
-  })
 }

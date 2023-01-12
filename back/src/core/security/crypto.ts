@@ -1,14 +1,12 @@
 import * as crypto from "node:crypto"
+import { env } from "node:process"
 require("dotenv").config()
-
-const keyLength = Number(process.env.CRYPTO_KEY_LENGTH!)
-const defaultSalt = process.env.CRYPTO_SECRET!
 
 export const generateRandomSalt = (): string => {
   return crypto.randomBytes(keyLength).toString("hex")
 }
-
-
+const keyLength = Number(env.CRYPTO_KEY_LENGTH!)
+const defaultSalt = env.CRYPTO_SECRET!
 
 export const generatePasswordWithSalt = (
   value: string,
@@ -21,7 +19,6 @@ export const generatePasswordWithSalt = (
     return crypto.scryptSync(value, defaultSalt, 64).toString("base64")
   }
   const passwordWithSalt = value + salt
-  
+
   return generateHash(passwordWithSalt)
 }
-

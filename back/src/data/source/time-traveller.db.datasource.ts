@@ -1,7 +1,7 @@
+import { dataORM } from "@data/db/dbconfig"
+import { TimeTravellerModel } from "@domain/model"
+import { TimeTraveller } from "@entities"
 import { Repository } from "typeorm"
-import { TimeTravellerModel } from "../../domain/model"
-import { dataORM } from "../db/dbconfig"
-import { TimeTraveller } from "../db/entities"
 
 export class TimeTravellerDataSource {
   private readonly timeTravellerRepository: Repository<TimeTraveller> =
@@ -26,10 +26,17 @@ export class TimeTravellerDataSource {
     })
   }
 
-  save(timeTraveller: TimeTravellerModel & { password: string; salt: string }) {
-    return this.timeTravellerRepository.save({
-      ...timeTraveller,
-      last_login_at: new Date()
-    })
+  loginUpsert(timeTraveller: TimeTravellerModel & { password: string; salt: string })
+  {
+    if (timeTraveller.id)
+    {
+      return this.timeTravellerRepository.save(
+        {
+          ...timeTraveller,
+          last_login_at: new Date()
+        }
+      )
+    }
+    return this.timeTravellerRepository.save({...timeTraveller})
   }
 }

@@ -1,20 +1,17 @@
-import { Min } from "class-validator"
+import { TimeTravellerModel } from "@domain/model"
 import { Field, ID, Int, ObjectType } from "type-graphql"
-import { TimeTravellerModel } from "../../domain/model"
 
 @ObjectType()
 export class TimeTraveller implements TimeTravellerModel {
-  
   @Field(() => ID, { nullable: true, description: "Time traveller ID" })
   id?: string
 
-  @Field(() => String)
+  @Field()
   name!: string
 
-  @Field(() => String)
+  @Field()
   birth!: string
-  
+
   @Field(() => Int)
-  @Min(1)
   passport!: number
 }

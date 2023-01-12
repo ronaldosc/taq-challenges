@@ -1,5 +1,5 @@
+import { ViolationModel } from "@domain/model"
 import { Field, ID, Int, ObjectType } from "type-graphql"
-import { ViolationModel } from "../../domain/model"
 
 @ObjectType()
 export class Violation implements ViolationModel {
@@ -14,4 +14,7 @@ export class Violation implements ViolationModel {
 
   @Field(() => Int, { description: "Infraction severity grade" })
   severity!: number
+
+  @Field(() => Date)
+  occurredAt!: string
 }

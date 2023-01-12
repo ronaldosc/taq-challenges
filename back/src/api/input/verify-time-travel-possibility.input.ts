@@ -1,5 +1,5 @@
 import { Field, InputType, Int } from "type-graphql"
-import { VerifyTimeTravelPossibilityInputModel } from "../../domain/model"
+import { VerifyTimeTravelPossibilityInputModel } from "@domain/model"
 
 @InputType()
 export class VerifyTimeTravelPossibilityInput

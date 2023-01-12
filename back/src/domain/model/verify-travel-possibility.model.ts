@@ -1,8 +1,8 @@
 export interface VerifyTimeTravelPossibilityInputModel {
   passport: number
-  travelDate: string
+  travelDate: string | Date
 }
 export interface TravelPossibilityResponseModel {
-  message: string
   possibility: boolean
+  message: string
 }

@@ -1,5 +1,5 @@
 import { Field, InputType, Int } from "type-graphql"
-import { CreateTimeTravellerInputModel } from "../../domain/model"
+import { CreateTimeTravellerInputModel } from "@domain/model"
 
 @InputType()
 export class CreateTimeTravellerInput implements CreateTimeTravellerInputModel {
@@ -13,5 +13,5 @@ export class CreateTimeTravellerInput implements CreateTimeTravellerInputModel {
   passport!: number
 
   @Field()
-  password!: string  
+  password!: string
 }
