@@ -1,24 +1,27 @@
+import { CRYPTO_KEY_LENGTH, CRYPTO_SECRET } from "@env"
 import * as crypto from "node:crypto"
-import { env } from "node:process"
-require("dotenv").config()
+import { Inject, Service } from "typedi"
 
-export const generateRandomSalt = (): string => {
-  return crypto.randomBytes(keyLength).toString("hex")
-}
-const keyLength = Number(env.CRYPTO_KEY_LENGTH!)
-const defaultSalt = env.CRYPTO_SECRET!
+@Service()
+export class CryptoService {
+  constructor(
+    @Inject(CRYPTO_SECRET) private defaultSalt: string,
+    @Inject(CRYPTO_KEY_LENGTH) private keyLength: Number
+  ) {}
 
-export const generatePasswordWithSalt = (
-  value: string,
-  salt: string
-): string => {
-  if (!salt.length) {
-    throw new Error("Invalid salt")
+  public generateRandomSalt(): string {
+    return crypto.randomBytes(Number(this.keyLength)).toString("hex")
   }
-  const generateHash = (value: string): string => {
-    return crypto.scryptSync(value, defaultSalt, 64).toString("base64")
-  }
-  const passwordWithSalt = value + salt
 
-  return generateHash(passwordWithSalt)
+  public generatePasswordWithSalt(value: string, salt: string): string {
+    if (!salt.length) throw new Error("Invalid salt")
+
+    const passwordWithSalt = value + salt
+
+    return this.generateHash(passwordWithSalt)
+  }
+
+  private generateHash(value: string): string {
+    return crypto.scryptSync(value, this.defaultSalt, 64).toString("base64")
+  }
 }

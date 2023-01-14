@@ -4,13 +4,17 @@ import {
   ViolationDataSource
 } from "@data/source"
 import { RegistryViolationInputModel, ViolationModel } from "@domain/model"
+import { Service } from "typedi"
 
+@Service()
 export class RegistryViolationUseCase {
-  private readonly timeTravellerRepository = new TimeTravellerDataSource()
-  private readonly violationRepository = new ViolationDataSource()
-  private readonly severityRepository = new SeverityDataSource()
+  constructor(
+    private readonly timeTravellerRepository: TimeTravellerDataSource,
+    private readonly violationRepository: ViolationDataSource,
+    private readonly severityRepository: SeverityDataSource
+  ) {}
 
-  async exec(input: RegistryViolationInputModel): Promise<ViolationModel> {
+  public async exec(input: RegistryViolationInputModel): Promise<ViolationModel> {
     const { description, occurredAt, passport, severity } = input
     const timeTraveller = await this.timeTravellerRepository.findOneByPassport(
       passport
@@ -31,7 +35,7 @@ export class RegistryViolationUseCase {
     if (!severityGrade) {
       throw new Error(`Infração com gravidade nível ${severity} inexistente.`)
     }
-    //TODO  AJUSTAR AQUI POIS O SEVERITY ESTÁ TIPADO e conflito de nomes aqui ?
+
     const violation = await this.violationRepository.save({
       description,
       occurred_at: new Date(occurredAt),

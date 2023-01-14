@@ -3,10 +3,14 @@ import {
   GetTravellerViolationsInputModel,
   TravellerViolationModel
 } from "@domain/model"
+import { Service } from "typedi"
 
+@Service()
 export class GetTravellerViolationsInfoUseCase {
-  private readonly timeTravellerRepository = new TimeTravellerDataSource()
-  private readonly violationRepository = new ViolationDataSource()
+  constructor(
+    private readonly timeTravellerRepository: TimeTravellerDataSource,
+    private readonly violationRepository: ViolationDataSource
+  ) {}
 
   async exec(
     data: GetTravellerViolationsInputModel
@@ -31,7 +35,7 @@ export class GetTravellerViolationsInfoUseCase {
     }
 
     return violations.map(violation =>
-      // data.passport,  é uma lista que retorna, mas não possui o nº do passaporte uma vez só amostrando
+     
       ({
         ...violation,
         severity: violation.severity.grade,

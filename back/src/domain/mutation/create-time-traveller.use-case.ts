@@ -1,15 +1,20 @@
+import { CryptoService } from "@crypto"
 import { TimeTravellerDataSource } from "@data/source"
 import {
   CreateTimeTravellerInputModel,
   TimeTravellerModel
 } from "@domain/model"
-import { generatePasswordWithSalt, generateRandomSalt } from "@security"
+import { Service } from "typedi"
 
+@Service()
 export class CreateTimeTravellerUseCase {
-  private readonly repository = new TimeTravellerDataSource()
-  private readonly salt = generateRandomSalt()
+  private readonly salt = this.cryptoService.generateRandomSalt()
+  constructor(
+    private readonly repository: TimeTravellerDataSource,
+    private readonly cryptoService: CryptoService
+  ) { }
 
-  async exec(
+  public async exec(
     input: CreateTimeTravellerInputModel
   ): Promise<TimeTravellerModel> {
     const { birth, name, passport, password } = input
@@ -26,9 +31,12 @@ export class CreateTimeTravellerUseCase {
       throw new Error(`A data de nascimento '${birth}' não é válida.`)
     }
 
-    const hashedPassword = generatePasswordWithSalt(password, this.salt)
+    const hashedPassword = this.cryptoService.generatePasswordWithSalt(
+      password,
+      this.salt
+    )
 
-    return this.repository.loginUpset({
+    return this.repository.loginUpsert({
       name,
       birth: birthdate.toJSON(),
       passport,

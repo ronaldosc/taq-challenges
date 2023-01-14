@@ -6,7 +6,7 @@
     "module": "CommonJS",
     "moduleResolution": "Node",
     "lib": ["ES6"],
-    // "types": ["reflect-metadata"],
+    "types": ["reflect-metadata"],
     "outDir": "./dist",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -14,13 +14,16 @@
     "skipLibCheck": true,
 
     "removeComments": true,
+
     "typeRoots": ["./node_modules/@types"],
     "baseUrl": "./src",
     "paths": {
       "@entities": ["data/db/entities"],
+      "@data/*": ["data/*"],
       "@domain/*": ["domain/*"],
-      "@security": ["core/security"],
-      "@data/*": ["data/*", "data/db/entities"]
+      "@jwt": ["core/security/jwt"],
+      "@crypto": ["core/security/crypto"],
+      "@env": ["core/env/env.conf"]
     }
   },
   "include": ["src/**/*"],
