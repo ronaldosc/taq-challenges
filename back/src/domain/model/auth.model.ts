@@ -9,3 +9,6 @@ export interface LoginResponseModel {
   timeTraveller: TimeTraveller
   lastLoginAt?: string
 }
+export interface ServerContext {
+  token: string;
+}
