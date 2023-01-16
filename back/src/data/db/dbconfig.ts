@@ -16,7 +16,7 @@ const dbScheme = Container.get(DB_SCHEME)
 const dbUser = Container.get(DB_USER)
 const dbPass = Container.get(DB_PASS)
 const dbHost = Container.get(DB_HOST)
-const dbPort = Container.get(DB_PORT)
+const dbPort = Container.get(DB_PORT) |0
 const dbDatabase = Container.get(DB_DATABASE)
 
 const dbURI = `${dbScheme}://${dbUser}:${dbPass}@${dbHost}:${dbPort}/${dbDatabase}`

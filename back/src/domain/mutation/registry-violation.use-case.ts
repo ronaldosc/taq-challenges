@@ -14,7 +14,9 @@ export class RegistryViolationUseCase {
     private readonly severityRepository: SeverityDataSource
   ) {}
 
-  public async exec(input: RegistryViolationInputModel): Promise<ViolationModel> {
+  public async exec(
+    input: RegistryViolationInputModel
+  ): Promise<ViolationModel> {
     const { description, occurredAt, passport, severity } = input
     const timeTraveller = await this.timeTravellerRepository.findOneByPassport(
       passport
@@ -24,9 +26,11 @@ export class RegistryViolationUseCase {
       throw new Error(`Usuário com o passaporte nº ${passport} não existe.`)
     }
 
-    if (!new Date(occurredAt)?.getTime()) {
+    const dateInputNumbered = new Date(occurredAt)?.getTime()
+
+    if (!dateInputNumbered) {
       throw new Error(
-        `A data informada para a ocorrência ${occurredAt} não é válida.`
+        `A data informada '${occurredAt}' não é válida para registrar a ocorrência.`
       )
     }
 
@@ -35,6 +39,20 @@ export class RegistryViolationUseCase {
     if (!severityGrade) {
       throw new Error(`Infração com gravidade nível ${severity} inexistente.`)
     }
+
+    const previousViolations = await this.violationRepository.findByTravellerId(
+      timeTraveller.id
+    )
+
+    previousViolations.map(registeredViolations => {
+      if (
+        registeredViolations.severity.grade === severity &&
+        registeredViolations.occurred_at.getTime() === dateInputNumbered &&
+        registeredViolations.description === description
+      ) {
+        throw new Error(`Não é possível registrar infração duplicada.`)
+      }
+    })
 
     const violation = await this.violationRepository.save({
       description,

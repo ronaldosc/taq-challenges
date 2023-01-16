@@ -21,7 +21,7 @@ export class LoginUseCase {
       salt ?? "defaultSalt"
     )
 
-    if (timeTraveller?.password !== hashedPassword || !timeTraveller) {
+    if (!timeTraveller || timeTraveller?.password !== hashedPassword) {
       throw new Error(`Credenciais de usuário inválidas.`)
     }
 
@@ -35,8 +35,6 @@ export class LoginUseCase {
     const lastLoggedIn: string = last_login_at
       ? localeDateTime.format(last_login_at)
       : "Este é o primeiro acesso."
-
-    // const token = createToken({ timeTraveller: { id, name, passport, birth } })
 
     const token = this.jwtService.createToken({
       timeTraveller: { id, name, passport, birth }

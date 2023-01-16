@@ -13,29 +13,29 @@ import { resolvers } from "./api"
 const app = express()
 
 EnvConfig.config()
-const port:number = Container.get(PORT)
+const port: number = Container.get(PORT) | 0
 const pathTo = Container.get(PATHTO)
 const host = Container.get(HOST)
 const jwtService = Container.get(JwtService)
 
 ;(async function () {
   const schema = await buildSchema({
-    resolvers,   /* [TimeTravellerResolver, ViolationsResolver, LoginResolver] */
+    resolvers,
+    container: Container,
     authChecker: ({ context }: { context: ServerContext }) => {
-      if (!context.token) {
-        throw new Error("Usuário sem credenciais válidas!")
-      }
       try {
+        if (!context.token) throw new Error()
+
         const { birth, id, name, passport } = jwtService.verifyToken(
           context.token
         )!
-        if (!birth && !id && !name && !passport) throw new Error();
+        if (!birth && !id && !name && !passport) throw new Error()
+
         return true
       } catch {
         throw new Error("Usuário sem credenciais válidas!")
       }
-    },
-    container: Container
+    }
   })
 
   const apolloServer = new ApolloServer<ServerContext>({
