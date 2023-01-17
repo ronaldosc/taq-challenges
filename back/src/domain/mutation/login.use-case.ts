@@ -1,21 +1,27 @@
+import { CryptoService } from "@crypto"
 import { TimeTravellerDataSource } from "@data/source"
 import { LoginInputModel, LoginResponseModel } from "@domain/model"
-import { createToken, generatePasswordWithSalt } from "@security"
-require("dotenv").config()
+import { JwtService } from "@jwt"
+import { Service } from "typedi"
 
+@Service()
 export class LoginUseCase {
-  private readonly repository = new TimeTravellerDataSource()
+  constructor(
+    private readonly repository: TimeTravellerDataSource,
+    private readonly jwtService: JwtService,
+    private readonly cryptoService: CryptoService
+  ) {}
 
   async exec(input: LoginInputModel): Promise<LoginResponseModel> {
     const { passport: passpt, password } = input
     const timeTraveller = await this.repository.findOneByPassport(passpt)
     const salt = timeTraveller?.salt
-    const hashedPassword = generatePasswordWithSalt(
+    const hashedPassword = this.cryptoService.generatePasswordWithSalt(
       password,
       salt ?? "defaultSalt"
     )
 
-    if (timeTraveller?.password !== hashedPassword || !timeTraveller) {
+    if (timeTraveller?.password !== hashedPassword) {
       throw new Error(`Credenciais de usuário inválidas.`)
     }
 
@@ -25,15 +31,16 @@ export class LoginUseCase {
       timeStyle: "long",
       timeZone: new Intl.DateTimeFormat().resolvedOptions().timeZone
     })
-    let lastLoggedIn: string
 
-    last_login_at
-      ? (lastLoggedIn = localeDateTime.format(last_login_at))
-      : (lastLoggedIn = "Este é o primeiro acesso.")
+    const lastLoggedIn: string = last_login_at
+      ? localeDateTime.format(last_login_at)
+      : "Este é o primeiro acesso."
 
-    const token = createToken({ timeTraveller: { id, name, passport, birth } })
+    const token = this.jwtService.createToken({
+      timeTraveller: { id, name, passport, birth }
+    })
 
-    await this.repository.loginUpset(timeTraveller)
+    await this.repository.loginUpsert(timeTraveller)
 
     return {
       token,

@@ -4,10 +4,14 @@ import {
   VerifyTimeTravelPossibilityInputModel
 } from "@domain/model"
 import { addYears, subYears } from "date-fns"
+import { Service } from "typedi"
 
+@Service()
 export class VerifyTravelPossibilityUseCase {
-  private readonly timeTravellerRepository = new TimeTravellerDataSource()
-  private readonly violationRepository = new ViolationDataSource()
+  constructor(
+    private readonly timeTravellerRepository: TimeTravellerDataSource,
+    private readonly violationRepository: ViolationDataSource
+  ) {}
 
   async exec(
     input: VerifyTimeTravelPossibilityInputModel

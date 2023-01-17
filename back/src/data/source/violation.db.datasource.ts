@@ -1,7 +1,9 @@
 import { dataORM } from "@data/db/dbconfig"
 import { Violation } from "@entities"
+import { Service } from "typedi"
 import { Repository } from "typeorm"
 
+@Service()
 export class ViolationDataSource {
   private readonly violationRepository: Repository<Violation> =
     dataORM.getRepository(Violation)

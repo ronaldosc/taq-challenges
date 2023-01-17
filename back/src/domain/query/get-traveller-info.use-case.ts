@@ -1,8 +1,10 @@
 import { TimeTravellerDataSource } from "@data/source"
 import { GetTravellerInfoInputModel, TimeTravellerModel } from "@domain/model"
+import { Service } from "typedi"
 
+@Service()
 export class GetTravellerInfoUseCase {
-  private readonly repository = new TimeTravellerDataSource()
+  constructor(private readonly repository: TimeTravellerDataSource) {}
 
   async exec(data: GetTravellerInfoInputModel): Promise<TimeTravellerModel> {
     const { passport } = data

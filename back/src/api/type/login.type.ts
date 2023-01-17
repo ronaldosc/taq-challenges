@@ -16,4 +16,3 @@ export class LoginResponse implements LoginResponseModel {
   @Field({ description: "Last it has logged in datetime" })
   lastLoginAt?: string
 }
-//TODO checar TimeTraveller aqui quanto ao retorno e tipagem, e a 'referencia cruzada com o ObjectType

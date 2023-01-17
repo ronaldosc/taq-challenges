@@ -5,9 +5,9 @@
   "main": "./src/index.ts",
   "scripts": {
     "build": "npx tsc",
+    "build:types": "npx tsc -d --emitDeclarationOnly --declarationDir ./dist && echo --- Definition Types generated. ---",
     "dev": "nodemon --exec ts-node src/index.ts -e ts,graphql",
-    "start": "npx tsc & node ./dist/index.js",
-    "dev:paths": "npx ts-node -r tsconfig-paths/register src/index.ts"
+    "start": "npx tsc & node ./dist/index.js"
   },
   "repository": {
     "type": "git",
@@ -36,6 +36,7 @@
     "jsonwebtoken": "9.0.0",
     "pg": "8.8.0",
     "type-graphql": "2.0.0-beta.1",
+    "typedi": "0.10.0",
     "typeorm": "0.3.10"
   },
   "peerDependencies": {
