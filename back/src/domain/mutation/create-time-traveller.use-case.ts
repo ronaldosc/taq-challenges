@@ -14,7 +14,7 @@ export class CreateTimeTravellerUseCase {
     private readonly cryptoService: CryptoService
   ) { }
 
-  public async exec(
+  async exec(
     input: CreateTimeTravellerInputModel
   ): Promise<TimeTravellerModel> {
     const { birth, name, passport, password } = input

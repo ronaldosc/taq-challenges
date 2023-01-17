@@ -21,7 +21,7 @@ export class LoginUseCase {
       salt ?? "defaultSalt"
     )
 
-    if (!timeTraveller || timeTraveller?.password !== hashedPassword) {
+    if (timeTraveller?.password !== hashedPassword) {
       throw new Error(`Credenciais de usuário inválidas.`)
     }
 

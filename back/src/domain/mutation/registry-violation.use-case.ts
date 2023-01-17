@@ -14,7 +14,7 @@ export class RegistryViolationUseCase {
     private readonly severityRepository: SeverityDataSource
   ) {}
 
-  public async exec(
+  async exec(
     input: RegistryViolationInputModel
   ): Promise<ViolationModel> {
     const { description, occurredAt, passport, severity } = input

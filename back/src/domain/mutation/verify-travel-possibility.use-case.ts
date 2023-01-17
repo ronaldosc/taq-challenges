@@ -13,7 +13,7 @@ export class VerifyTravelPossibilityUseCase {
     private readonly violationRepository: ViolationDataSource
   ) {}
 
-  public async exec(
+  async exec(
     input: VerifyTimeTravelPossibilityInputModel
   ): Promise<TravelPossibilityResponseModel> {
     const { passport, travelDate } = input
