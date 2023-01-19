@@ -6,12 +6,12 @@ import { EnvConfig, HOST, PATHTO, PORT } from "@env"
 import { JwtService } from "@jwt"
 import express from "express"
 import { GraphQLFormattedError } from "graphql"
+import util from "node:util"
 import { buildSchema } from "type-graphql"
 import Container from "typedi"
 import { resolvers } from "./api"
-
 const app = express()
-
+util.inspect.styles
 EnvConfig.config()
 const port: number = Container.get(PORT) | 0
 const pathTo = Container.get(PATHTO)
@@ -50,7 +50,9 @@ const jwtService = Container.get(JwtService)
       if (tracesValues.includes("GraphQLError")) {
         return (
           console.error(
-            ">  Some error occurred in GraphQL and/or processing request  < \n"
+            "\x1b[33;1m",
+            ">  Some error occurred in GraphQL and/or processing request  <",
+            "\x1b[0m"
           ),
           { message, locations, path, extensions }
         )
@@ -74,5 +76,5 @@ const jwtService = Container.get(JwtService)
 })()
 
 app.listen(port, () => {
-  console.log(`http://${host}:%d${pathTo}`, port)
+  console.log("\x1b[3;1m", `http://${host}:${port}${pathTo}`, "\x1b[0m")
 })
