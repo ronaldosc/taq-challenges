@@ -6,12 +6,12 @@ import { EnvConfig, HOST, PATHTO, PORT } from "@env"
 import { JwtService } from "@jwt"
 import express from "express"
 import { GraphQLFormattedError } from "graphql"
-import util from "node:util"
 import { buildSchema } from "type-graphql"
 import Container from "typedi"
 import { resolvers } from "./api"
+
 const app = express()
-util.inspect.styles
+
 EnvConfig.config()
 const port: number = Container.get(PORT) | 0
 const pathTo = Container.get(PATHTO)
