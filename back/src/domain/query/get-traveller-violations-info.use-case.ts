@@ -34,13 +34,10 @@ export class GetTravellerViolationsInfoUseCase {
       )
     }
 
-    return violations.map(violation =>
-     
-      ({
-        ...violation,
-        severity: violation.severity.grade,
-        occurredAt: violation.occurred_at
-      })
-    )
+    return violations.map(violation => ({
+      ...violation,
+      severity: violation.severity.grade,
+      occurredAt: violation.occurred_at
+    }))
   }
 }

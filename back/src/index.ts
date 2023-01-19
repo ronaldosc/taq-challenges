@@ -24,12 +24,16 @@ const jwtService = Container.get(JwtService)
     container: Container,
     authChecker: ({ context }: { context: ServerContext }) => {
       try {
-        if (!context.token) throw new Error()
+        if (!context.token) {
+          throw new Error()
+        }
 
         const { birth, id, name, passport } = jwtService.verifyToken(
           context.token
         )!
-        if (!birth && !id && !name && !passport) throw new Error()
+        if (!birth && !id && !name && !passport) {
+          throw new Error()
+        }
 
         return true
       } catch {
