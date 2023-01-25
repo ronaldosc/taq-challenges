@@ -2,12 +2,12 @@
   "name": "taq-challange_front_and_back",
   "version": "1.0.1",
   "description": "Desafios [back-end](https://github.com/LucasGobatto/taq-challange/blob/master/backend.md#desafio-backend)\n [front-end](https://github.com/LucasGobatto/taq-challange/blob/master/frontend.md#desafio-frontend)",
-  "main": "./src/index.ts",
+  "main": "./dist/index.js",
   "scripts": {
     "build": "npx tsc",
     "build:types": "npx tsc -d --emitDeclarationOnly --declarationDir ./dist && echo --- Definition Types generated. ---",
     "dev": "nodemon --exec ts-node src/index.ts -e ts,graphql",
-    "start": "npx tsc & node ./dist/index.js"
+    "start": "npx tsc & node -r tsconfig-paths ."
   },
   "repository": {
     "type": "git",

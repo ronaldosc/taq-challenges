@@ -2,7 +2,7 @@ import { ApolloServer } from "@apollo/server"
 import { expressMiddleware } from "@apollo/server/express4"
 import { dbConfig } from "@data/db/dbconfig"
 import { ServerContext } from "@domain/model"
-import { EnvConfig, HOST, PATHTO, PORT } from "@env"
+import { EnvConfig, HOST, PATH_TO, PORT } from "@env"
 import { JwtService } from "@jwt"
 import express from "express"
 import { GraphQLFormattedError } from "graphql"
@@ -13,8 +13,8 @@ import { resolvers } from "./api"
 const app = express()
 
 EnvConfig.config()
-const port: number = Container.get(PORT) | 0
-const pathTo = Container.get(PATHTO)
+const port = Container.get(PORT)
+const pathTo = Container.get(PATH_TO)
 const host = Container.get(HOST)
 const jwtService = Container.get(JwtService)
 

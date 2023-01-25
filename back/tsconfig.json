@@ -7,7 +7,6 @@
     "moduleResolution": "Node",
     "lib": ["ES6"],
     "types": ["reflect-metadata"],
-    "typeRoots": ["./node_modules/@types"],
     "outDir": "./dist",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,

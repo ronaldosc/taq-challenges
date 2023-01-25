@@ -1,10 +1,7 @@
 import { InfractionSeverity, TimeTraveller, Violation } from "@entities"
-import { DATABASE_URL, EnvConfig } from "@env"
+import { DATABASE_URL } from "@env"
 import Container from "typedi"
 import { DataSource } from "typeorm"
-
-EnvConfig.config()
-const databaseURL = Container.get(DATABASE_URL)
 
 export const dataORM = new DataSource({
   type: "postgres",
@@ -13,6 +10,6 @@ export const dataORM = new DataSource({
 })
 
 export async function dbConfig() {
-  dataORM.setOptions({ url: databaseURL })
+  dataORM.setOptions({ url: Container.get(DATABASE_URL) })
   await dataORM.initialize()
 }

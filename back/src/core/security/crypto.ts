@@ -1,5 +1,5 @@
 import { CRYPTO_KEY_LENGTH, CRYPTO_SECRET } from "@env"
-import * as crypto from "node:crypto"
+import crypto from "node:crypto"
 import { Inject, Service } from "typedi"
 
 @Service()
@@ -10,7 +10,7 @@ export class CryptoService {
   ) {}
 
   public generateRandomSalt(): string {
-    return crypto.randomBytes(this.keyLength | 0).toString("hex")
+    return crypto.randomBytes(this.keyLength).toString("hex")
   }
 
   public generatePasswordWithSalt(value: string, salt: string): string {
