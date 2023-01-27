@@ -10,7 +10,7 @@ export class CryptoService {
   ) {}
 
   public generateRandomSalt(): string {
-    return crypto.randomBytes(this.keyLength).toString("hex")
+    return crypto.randomBytes(+this.keyLength).toString("hex")
   }
 
   public generatePasswordWithSalt(value: string, salt: string): string {
