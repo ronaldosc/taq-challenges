@@ -19,6 +19,7 @@ jobs:
     - name: npm install, make test-coverage
       working-directory: ./back
       run: |
+        cd back
         npm install
         make test-coverage
 
