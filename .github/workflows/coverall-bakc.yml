@@ -17,6 +17,7 @@ jobs:
         node-version: 18.x
 
     - name: npm install, make test-coverage
+      working-directory: ./back
       run: |
         npm install
         make test-coverage
