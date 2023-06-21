@@ -28,7 +28,7 @@
     "typescript": "4.8.4"
   },
   "dependencies": {
-    "@apollo/server": "4.3.0",
+    "@apollo/server": "4.7.4",
     "date-fns": "2.29.3",
     "dotenv": "16.0.3",
     "express": "4.18.2",
