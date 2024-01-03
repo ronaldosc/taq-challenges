@@ -31,10 +31,10 @@ jobs:
   finish:
     needs: test
     if: ${{ always() }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
     - name: Coveralls Finished
-      uses: coverallsapp/github-action@v3
+      uses: coverallsapp/github-action@v1
       with:
         parallel-finished: true
         carryforward: "run-1,run-2"
