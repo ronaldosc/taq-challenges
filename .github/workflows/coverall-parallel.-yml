@@ -4,7 +4,7 @@ name: Test Coveralls Parallel
 
 jobs:
   test:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         test_number:
