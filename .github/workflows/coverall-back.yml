@@ -23,4 +23,7 @@ jobs:
         # make test-coverage
 
     - name: Coveralls GitHub Action
-      uses: coverallsapp/github-action@v3 || true
+      # uses: coverallsapp/github-action@v3
+      run: coveralls report -t ./back/test/test.js || true
+      # run; coveralls report -i src/main.js
+      
