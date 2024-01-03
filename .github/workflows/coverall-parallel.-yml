@@ -4,7 +4,7 @@ name: Test Coveralls Parallel
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
         test_number:
@@ -17,7 +17,7 @@ jobs:
       with:
         node-version: 16.x
 
-    - name: npm install
+    - name: npm install dependencies 
       run: npm install
 
     - name: Test ${{ matrix.test_number }}
@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Coveralls Finished
-      uses: coverallsapp/github-action@v1
+      uses: coverallsapp/github-action@v3
       with:
         parallel-finished: true
         carryforward: "run-1,run-2"
