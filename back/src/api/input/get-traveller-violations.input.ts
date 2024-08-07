@@ -1,5 +1,5 @@
+import { GetTravellerViolationsInputModel } from "@domain/model"
 import { Field, InputType, Int } from "type-graphql"
-import { GetTravellerViolationsInputModel } from "../../domain/model"
 
 @InputType()
 export class GetTravellerViolationsInput

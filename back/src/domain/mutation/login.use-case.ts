@@ -1,30 +1,51 @@
-import { createToken, generatePasswordWithSalt } from "../../core/security";
-import { TimeTravellerDataSource } from '../../data/source';
-import { LoginInputModel, LoginResponseModel } from "../model";
-require("dotenv").config()
+import { CryptoService } from "@crypto"
+import { TimeTravellerDataSource } from "@data/source"
+import { LoginInputModel, LoginResponseModel } from "@domain/model"
+import { JwtService } from "@jwt"
+import { Service } from "typedi"
 
-export const loginUseCase = async (input: LoginInputModel): Promise<LoginResponseModel> => {
-  const repository = new TimeTravellerDataSource();
-  const timeTraveller = await repository.findOneByPassport(input.passport);
+@Service()
+export class LoginUseCase {
+  constructor(
+    private readonly repository: TimeTravellerDataSource,
+    private readonly jwtService: JwtService,
+    private readonly cryptoService: CryptoService
+  ) {}
 
-  const salt = timeTraveller?.salt
-  const hashedPassword = generatePasswordWithSalt(
-    input.password,
-    salt ?? "defaultSalt"
-  )
+  async exec(input: LoginInputModel): Promise<LoginResponseModel> {
+    const { passport: passpt, password } = input
+    const timeTraveller = await this.repository.findOneByPassport(passpt)
+    const salt = timeTraveller?.salt
+    const hashedPassword = this.cryptoService.generatePasswordWithSalt(
+      password,
+      salt ?? "defaultSalt"
+    )
 
-  if (timeTraveller?.password !== hashedPassword || !timeTraveller) {
-    throw new Error(`Credenciais de usuário inválidas.`)
-  }
-  
-  const { id, name, passport, birth } = timeTraveller
-  const token = createToken({ timeTraveller: { id, name, passport, birth } });
+    if (timeTraveller?.password !== hashedPassword) {
+      throw new Error(`Credenciais de usuário inválidas.`)
+    }
 
-  const updatedTimeTraveller = await repository.save(timeTraveller);
+    const { id, name, passport, birth, last_login_at } = timeTraveller
+    const localeDateTime = new Intl.DateTimeFormat("pt-BR", {
+      dateStyle: "medium",
+      timeStyle: "long",
+      timeZone: new Intl.DateTimeFormat().resolvedOptions().timeZone
+    })
 
-  return {
-    token,
-    timeTraveller,
-    lastLoginAt: updatedTimeTraveller.last_login_at.toString()
+    const lastLoggedIn: string = last_login_at
+      ? localeDateTime.format(last_login_at)
+      : "Este é o primeiro acesso."
+
+    const token = this.jwtService.createToken({
+      timeTraveller: { id, name, passport, birth }
+    })
+
+    await this.repository.loginUpsert(timeTraveller)
+
+    return {
+      token,
+      timeTraveller,
+      lastLoginAt: lastLoggedIn
+    }
   }
 }

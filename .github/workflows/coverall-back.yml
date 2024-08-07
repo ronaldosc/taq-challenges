@@ -1,0 +1,29 @@
+on: ["push", "pull_request"]
+
+name: Test Coveralls
+
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-22.04
+    steps:
+
+    - uses: actions/checkout@v3
+
+    - name: Use Node.js 18.x
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.x
+
+    - name: npm install, make test-coverage
+      working-directory: ./back
+      run: |
+        npm install
+        # make test-coverage
+
+    - name: Coveralls GitHub Action
+      # uses: coverallsapp/github-action@v3
+      run: coveralls report -t ./back/test/test.js || true
+      # run; coveralls report -i src/main.js
+      

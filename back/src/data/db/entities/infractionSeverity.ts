@@ -5,7 +5,7 @@ import { Violation } from './violation';
  */
 @Entity('infraction_severity')
 export class InfractionSeverity {
-    @PrimaryGeneratedColumn('uuid')
+    @PrimaryGeneratedColumn('increment')
     id!: string
     @Column()
     text!: string

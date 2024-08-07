@@ -1,31 +1,39 @@
 import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql"
+import { Service } from "typedi"
 import {
-  getTravellerViolationsInfoUseCase,
-  registryViolationUseCase
+  GetTravellerViolationsInfoUseCase,
+  RegistryViolationUseCase,
+  TravellerViolationModel,
+  ViolationModel
 } from "../domain"
-import { TravellerViolationModel, ViolationModel } from "../domain/model"
-import { ServerContext } from "../domain/model/server-context.model"
 import { GetTravellerViolationsInput, RegistryViolationInput } from "./input"
 import { TravellerViolation, Violation } from "./type"
 
+@Service()
 @Resolver()
 export class ViolationsResolver {
-
+  constructor(
+    private readonly getTravellerViolationsInfoUseCase: GetTravellerViolationsInfoUseCase,
+    private readonly registryViolationUseCase: RegistryViolationUseCase
+  ) {}
+  
   @Query(() => [TravellerViolation])
   @Authorized()
   getTravellerViolationsInfo(
-    @Arg("data") data: GetTravellerViolationsInput
+    @Ctx()
+    @Arg("data")
+    data: GetTravellerViolationsInput
   ): Promise<TravellerViolationModel[]> {
-    return getTravellerViolationsInfoUseCase(data)
+    return this.getTravellerViolationsInfoUseCase.exec(data)
   }
-  
+
   @Mutation(() => Violation)
   @Authorized()
   registryViolation(
-    @Ctx() context: ServerContext,
-    @Arg("input") input: RegistryViolationInput
+    @Ctx()
+    @Arg("input")
+    input: RegistryViolationInput
   ): Promise<ViolationModel> {
-    console.log(context);
-    return registryViolationUseCase(input)
+    return this.registryViolationUseCase.exec(input)
   }
 }

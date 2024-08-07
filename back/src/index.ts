@@ -1,61 +1,71 @@
-import { ApolloServer } from "@apollo/server";
-import { expressMiddleware } from "@apollo/server/express4";
-import express from "express";
-import { GraphQLFormattedError } from "graphql";
-import "reflect-metadata";
-import { buildSchema } from "type-graphql";
-import { LoginResolver, TimeTravellerResolver, ViolationsResolver } from "./api";
-import { verifyToken } from "./core/security";
-import { dbConfig } from "./data/db/dbconfig";
-import { ServerContext } from "./domain/model/server-context.model";
-require("dotenv").config()
+import { ApolloServer } from "@apollo/server"
+import { expressMiddleware } from "@apollo/server/express4"
+import { dbConfig } from "@data/db/dbconfig"
+import { ServerContext } from "@domain/model"
+import { EnvConfig, HOST, PATH_TO, PORT } from "@env"
+import { JwtService } from "@jwt"
+import express from "express"
+import { GraphQLFormattedError } from "graphql"
+import { buildSchema } from "type-graphql"
+import Container from "typedi"
+import { resolvers } from "./api"
 
 const app = express()
 
+EnvConfig.config()
+const port = Container.get(PORT)
+const pathTo = Container.get(PATH_TO)
+const host = Container.get(HOST)
+const jwtService = Container.get(JwtService)
+
 ;(async function () {
   const schema = await buildSchema({
-    resolvers: [ TimeTravellerResolver, ViolationsResolver, LoginResolver ],
+    resolvers,
+    container: Container,
     authChecker: ({ context }: { context: ServerContext }) => {
-      if (!context.token) {
-        throw new Error('Usuário sem credenciais válidas!');
-      }
-
       try {
-        const decodedToken = verifyToken(context.token);
+        if (!context.token) {
+          throw new Error()
+        }
 
-        if (!!decodedToken?.birth && !!decodedToken.id && !!decodedToken.name && !!decodedToken.passport) {
-          return true;
-        };
+        const { birth, id, name, passport } = jwtService.verifyToken(
+          context.token
+        )!
+        if (!birth && !id && !name && !passport) {
+          throw new Error()
+        }
 
-        throw new Error();
+        return true
       } catch {
-        throw new Error('Usuário sem credenciais válidas!');
+        throw new Error("Usuário sem credenciais válidas!")
       }
     }
   })
 
   const apolloServer = new ApolloServer<ServerContext>({
     schema,
-    
     formatError: (error: GraphQLFormattedError) => {
       const { message, locations, path, extensions } = error
-      let tracesKey = Object.values(extensions!).toString()
-      if (tracesKey.includes("GraphQLError")) {
-        console.error(">  Some error occurred in processing request and/or GraphQL  <")
-        return { message, locations, path, extensions }
+      const tracesValues = Object.values(extensions!).toString()
+      if (tracesValues.includes("GraphQLError")) {
+        return (
+          console.error(
+            "\x1b[33;1m",
+            ">  Some error occurred in GraphQL and/or processing request  <",
+            "\x1b[0m"
+          ),
+          { message, locations, path, extensions }
+        )
       }
       return { message }
-      // se for o erro for emitido por GraphQLError ele exibirá informação completa
-          /*   let tracesKey = Object.values(error.extensions!).toString()
-               if (tracesKey.match(/\W(Error)/gm)) {
-                 return {message: error.message} */
     }
   })
 
   await apolloServer.start()
+  await dbConfig()
 
   app.use(
-    "/graphql",
+    pathTo,
     express.json(),
     expressMiddleware(apolloServer, {
       context: async ({ req }) => {
@@ -63,14 +73,8 @@ const app = express()
       }
     })
   )
-
-  await dbConfig()
-  
 })()
 
-app.listen(process.env.PORT || 3000, () => {
-  console.log(
-    `http://${process.env.HOST}:%d/graphql`,
-    process.env.PORT || 3000
-  )
+app.listen(port, () => {
+  console.log("\x1b[3;1m", `http://${host}:${port}${pathTo}`, "\x1b[0m")
 })

@@ -1,53 +1,43 @@
-import { TimeTravellerDataSource, ViolationDataSource } from "../../data/source"
+import { TimeTravellerDataSource, ViolationDataSource } from "@data/source"
 import {
   GetTravellerViolationsInputModel,
   TravellerViolationModel
-} from "../model"
+} from "@domain/model"
+import { Service } from "typedi"
 
-export const getTravellerViolationsInfoUseCase = async (
-  data: GetTravellerViolationsInputModel
-): Promise<TravellerViolationModel[]> => {
-  const timeTravellerRepository = new TimeTravellerDataSource()
-  const violationRepository = new ViolationDataSource()
+@Service()
+export class GetTravellerViolationsInfoUseCase {
+  constructor(
+    private readonly timeTravellerRepository: TimeTravellerDataSource,
+    private readonly violationRepository: ViolationDataSource
+  ) {}
 
-  const timeTraveller = await timeTravellerRepository.findOneByPassport(
-    data.passport
-  )
-  if (!timeTraveller) {
-    throw new Error(`Usuário com o passaporte nº ${data.passport} não existe.`)
-  }
+  async exec(
+    data: GetTravellerViolationsInputModel
+  ): Promise<TravellerViolationModel[]> {
+    const { passport } = data
+    const timeTraveller = await this.timeTravellerRepository.findOneByPassport(
+      passport
+    )
 
-  const violations = await violationRepository.findByTravellerId(
-    timeTraveller.id
-  )
+    if (!timeTraveller) {
+      throw new Error(`Usuário com o passaporte nº ${passport} não existe.`)
+    }
 
-  //  if (violations.every(violation => violation.time_traveller !== null)) {
-  //     return {message: `Usuário com o passaporte nº ${data.passport} não possui infrações registradas.`}
-  //   }
-    // for (const [_key, value] of Object.entries(violations.values)) {
-      if (!violations.length){
-        throw new Error(`Usuário com o passaporte nº ${data.passport} não possui infrações registradas.`)}
-      
-    // console.dir(violations) /////////////////
-    
-      return violations.map(
-        violation => (
-          data.passport,
-          {
-            ...violation,
-            severity: violation.severity.grade
-          }
-        )
+    const violations = await this.violationRepository.findByTravellerId(
+      timeTraveller.id
+    )
+
+    if (!violations.length) {
+      throw new Error(
+        `Usuário com o passaporte nº ${passport} não possui infrações registradas.`
       )
     }
-    
 
-/* 
-  if (violations.includes({})) {
-    return {
-      message: `Usuário com o passaporte nº ${data.passport} não possui infrações registradas.`
-    }
-  } */
- 
-  
-
+    return violations.map(violation => ({
+      ...violation,
+      severity: violation.severity.grade,
+      occurredAt: violation.occurred_at
+    }))
+  }
+}

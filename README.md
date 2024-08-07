@@ -1,5 +1,5 @@
 # Desafios de Onboading
 
-Desafio [back-end](https://github.com/LucasGobatto/taq-challange/blob/master/backend.md#desafio-backend)
+Desafio [back-end](https://github.com/ronaldosc/taq-challenges/blob/develop/backend.md#desafio-backend)
 
-Desafio [front-end](https://github.com/LucasGobatto/taq-challange/blob/master/frontend.md#desafio-frontend)
+Desafio [front-end](https://github.com/ronaldosc/taq-challenges/blob/develop/frontend.md#desafio-frontend)

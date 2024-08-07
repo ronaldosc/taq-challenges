@@ -1,4 +1,4 @@
-import { TimeTraveller } from "../../data/db/entities"
+import { TimeTraveller } from "@entities"
 
 export interface LoginInputModel {
   passport: number
@@ -8,4 +8,7 @@ export interface LoginResponseModel {
   token: string
   timeTraveller: TimeTraveller
   lastLoginAt?: string
+}
+export interface ServerContext {
+  token: string;
 }
