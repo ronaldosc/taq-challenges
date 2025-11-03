@@ -38,7 +38,7 @@
     "pg": "8.8.0",
     "type-graphql": "2.0.0-beta.1",
     "typedi": "0.10.0",
-    "typeorm": "0.3.18"
+    "typeorm": "0.3.26"
   },
   "peerDependencies": {
     "class-validator": "0.13.2"
